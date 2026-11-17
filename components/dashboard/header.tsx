@@ -1,8 +1,9 @@
 // =====================================================================
 // Header — ສ່ວນຫົວຂອງ Dashboard
 // ---------------------------------------------------------------------
-// - ແຖວທີ 1: "Welcome, <ຊື່>" + ປຸ່ມ 🔔 ⚙️ dark mode + ໂປຣໄຟລ໌
-// - ແຖວທີ 2: ແທັບ Overview / Sales / Inventory + ຊ່ອງຄົ້ນຫາ
+// - ແຖວທີ 1: "ສະບາຍດີ, <ຊື່>" + ປຸ່ມ 🔔 ⚙️ ພາສາ dark mode + ໂປຣໄຟລ໌
+// - ແຖວທີ 2: ແທັບ ພາບລວມ / ການຂາຍ / ສາງລົດ + ຊ່ອງຄົ້ນຫາ
+// ຂໍ້ຄວາມທັງໝົດມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ)
 // ຊື່ ແລະ email ດຶງມາຈາກ localStorage (ບັນທຶກໄວ້ຕອນ Register)
 // =====================================================================
 
@@ -14,17 +15,22 @@ import { Bell, LogOut, Search, Settings } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
+import { useLanguage } from "@/components/language-provider";
 import { LogoutButton } from "@/components/dashboard/logout-button";
 import { loadUser, type User } from "@/lib/user";
 
-// ລາຍການແທັບ
-const tabs = ["Overview", "Sales", "Inventory"];
+// ລາຍການແທັບ: ແຕ່ລະຄ່າ = ຊື່ຂໍ້ຄວາມໃນ t.dashboard.tabs
+const tabs = ["overview", "sales", "inventory"] as const;
 
 export function Header() {
+  // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
+  const { t } = useLanguage();
   // ຂໍ້ມູນຜູ້ໃຊ້: ເລີ່ມຕົ້ນເປັນ null (ຍັງບໍ່ໄດ້ອ່ານ)
   const [user, setUser] = useState<User | null>(null);
   // ແທັບທີ່ເລືອກຢູ່
-  const [activeTab, setActiveTab] = useState("Overview");
+  // (typeof tabs)[number] = ຄ່າໃດໜຶ່ງໃນ tabs ("overview" | "sales" | "inventory")
+  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("overview");
 
   // ອ່ານຂໍ້ມູນຜູ້ໃຊ້ຈາກ localStorage ຫຼັງຈາກໜ້າສະແດງແລ້ວ
   // (ຕ້ອງເຮັດໃນ useEffect ເພາະ localStorage ມີສະເພາະໃນ browser, ບໍ່ມີຢູ່ server)
@@ -33,10 +39,10 @@ export function Header() {
     setUser(loadUser());
   }, []);
 
-  // ຖ້າຍັງບໍ່ມີຂໍ້ມູນ (ຍັງບໍ່ເຄີຍ Register) ໃຫ້ສະແດງ "Guest"
+  // ຖ້າຍັງບໍ່ມີຂໍ້ມູນ (ຍັງບໍ່ເຄີຍ Register) ໃຫ້ສະແດງ "ແຂກ" (ຫຼື "Guest" ໃນພາສາອັງກິດ)
   // "??" = ຖ້າຄ່າທາງຊ້າຍເປັນ null/undefined ໃຫ້ໃຊ້ຄ່າທາງຂວາແທນ
   // "?." = ຖ້າ user ເປັນ null ຈະບໍ່ error ແຕ່ໃຫ້ຄ່າ undefined
-  const name = user?.name ?? "Guest";
+  const name = user?.name ?? t.dashboard.guest;
   const email = user?.email ?? "";
   // ຕົວອັກສອນທຳອິດຂອງຊື່ ໃຊ້ເປັນຮູບໂປຣໄຟລ໌ ເຊັ່ນ "Somchai" → "S"
   const initial = name.charAt(0).toUpperCase();
@@ -48,19 +54,20 @@ export function Header() {
         <div>
           {/* ຊື່ຜູ້ໃຊ້ເປັນສີທອງ */}
           <h1 className="text-2xl font-semibold sm:text-3xl">
-            Welcome, <span className="text-primary">{name}</span>
+            {t.dashboard.welcome} <span className="text-primary">{name}</span>
           </h1>
-          <p className="text-sm text-muted-foreground">Here&apos;s what&apos;s happening at your showroom today</p>
+          <p className="text-sm text-muted-foreground">{t.dashboard.subtitle}</p>
         </div>
 
         <div className="flex items-center gap-2">
           {/* ປຸ່ມໄອຄອນ: rounded-full = ກົມ */}
-          <Button variant="outline" size="icon" className="rounded-full" aria-label="Notifications">
+          <Button variant="outline" size="icon" className="rounded-full" aria-label={t.dashboard.notifications}>
             <Bell />
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full" aria-label="Settings">
+          <Button variant="outline" size="icon" className="rounded-full" aria-label={t.dashboard.settings}>
             <Settings />
           </Button>
+          <LanguageToggle />
           <ThemeToggle />
           {/* ປຸ່ມ Logout ສຳລັບມືຖື (lg:hidden = ເຊື່ອງໃນຈໍໃຫຍ່ ເພາະມີໃນ Sidebar ແລ້ວ) */}
           <LogoutButton
@@ -99,7 +106,7 @@ export function Header() {
                   : "rounded-full px-4 py-1.5 text-sm text-muted-foreground hover:text-foreground"
               }
             >
-              {tab}
+              {t.dashboard.tabs[tab]}
             </button>
           ))}
         </div>
@@ -107,7 +114,7 @@ export function Header() {
         {/* ຊ່ອງຄົ້ນຫາ (ພຽງໜ້າຕາ ຍັງຄົ້ນຫາບໍ່ໄດ້) */}
         <div className="relative w-full sm:w-72">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Search cars, customers..." className="h-10 rounded-full bg-card pl-10" />
+          <Input placeholder={t.dashboard.search} className="h-10 rounded-full bg-card pl-10" />
         </div>
       </div>
     </header>

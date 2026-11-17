@@ -1,7 +1,8 @@
 // =====================================================================
 // ກາດ Top Selling Cars — ລົດຂາຍດີ ແບ່ງເປັນ 3 ແທັບ
 // ---------------------------------------------------------------------
-// ກົດແທັບ Sedan / SUV / Pickup ແລ້ວລາຍການລົດຈະປ່ຽນຕາມ
+// ກົດແທັບ ເກັງ / SUV / ກະບະ ແລ້ວລາຍການລົດຈະປ່ຽນຕາມ
+// ຂໍ້ຄວາມມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ), ຊື່ລຸ້ນລົດບໍ່ແປ
 // ແຕ່ລະແຖວມີ: ຮູບລົດ, ຊື່ລຸ້ນ + ປີ, ລາຄາ (ກີບ + ໂດລາ), ຂາຍໄດ້ / ເຫຼືອໃນສາງ
 // =====================================================================
 
@@ -12,15 +13,15 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { CarImage } from "@/components/dashboard/car-image";
 import { formatKip, formatUSD, topCars, type CarType } from "@/lib/dashboard-data";
+import { useLanguage } from "@/components/language-provider";
 
-// ລາຍການແທັບ: key = ຊື່ໃນຂໍ້ມູນ (ຕ້ອງກົງກັບ topCars ໃນ dashboard-data), label = ຂໍ້ຄວາມທີ່ສະແດງ
-const tabs: { key: CarType; label: string }[] = [
-  { key: "sedan", label: "Sedan" },
-  { key: "suv", label: "SUV" },
-  { key: "pickup", label: "Pickup" },
-];
+// ລາຍການແທັບ: ແຕ່ລະຄ່າ = ຊື່ໃນຂໍ້ມູນ topCars ແລະຊື່ຂໍ້ຄວາມໃນ t.topCars ພ້ອມກັນ
+// ເຊັ່ນ "pickup" → topCars.pickup (ລາຍການລົດ) ແລະ t.topCars.pickup ("ກະບະ")
+const tabs: CarType[] = ["sedan", "suv", "pickup"];
 
 export function TopCarsCard() {
+  // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
+  const { t } = useLanguage();
   // ແທັບທີ່ເລືອກຢູ່ (ເລີ່ມຕົ້ນ = pickup)
   const [activeTab, setActiveTab] = useState<CarType>("pickup");
 
@@ -29,22 +30,22 @@ export function TopCarsCard() {
 
   return (
     <Card className="h-full gap-4 p-5">
-      <h3 className="font-medium">Top Selling Cars</h3>
+      <h3 className="font-medium">{t.topCars.title}</h3>
 
       {/* ----- ແທັບ ----- */}
       <div className="flex gap-2">
         {tabs.map((tab) => (
           <button
-            key={tab.key}
+            key={tab}
             type="button"
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => setActiveTab(tab)}
             className={
-              activeTab === tab.key
+              activeTab === tab
                 ? "rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary"
                 : "rounded-full border px-3 py-1 text-xs text-muted-foreground hover:text-foreground"
             }
           >
-            {tab.label}
+            {t.topCars[tab]}
           </button>
         ))}
       </div>
@@ -63,7 +64,8 @@ export function TopCarsCard() {
               <p className="truncate text-sm font-medium">{car.name}</p>
               <p className="text-xs text-muted-foreground">{car.year}</p>
               <p className="text-xs text-muted-foreground">
-                Sold <span className="font-semibold text-foreground">{car.sold}</span> · Stock{" "}
+                {t.topCars.sold} <span className="font-semibold text-foreground">{car.sold}</span> ·{" "}
+                {t.topCars.stock}{" "}
                 <span className="font-semibold text-foreground">{car.stock}</span>
               </p>
             </div>

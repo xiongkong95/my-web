@@ -14,9 +14,12 @@
 import { useEffect } from "react"; // useEffect = ເຮັດວຽກບາງຢ່າງຫຼັງຈາກສະແດງໜ້າແລ້ວ
 import { Moon, Sun } from "lucide-react"; // ໄອຄອນດວງຈັນ ແລະ ດວງຕາເວັນ
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language-provider"; // ເອົາຂໍ້ຄວາມຕາມພາສາ
 
 // "export" (ບໍ່ມີ default) = ສົ່ງອອກໄປ ເພື່ອໃຫ້ໄຟລ໌ອື່ນ import { ThemeToggle } ໄປໃຊ້ໄດ້
 export function ThemeToggle() {
+  const { t } = useLanguage();
+
   // ---------- ເມື່ອເປີດໜ້າເວັບ: ອ່ານໂໝດທີ່ເຄີຍບັນທຶກໄວ້ ----------
   // [] ຢູ່ທ້າຍ = ໃຫ້ເຮັດວຽກພຽງເທື່ອດຽວ ຕອນໂຫຼດໜ້າ
   useEffect(() => {
@@ -43,7 +46,7 @@ export function ThemeToggle() {
       variant="outline" // ຮູບແບບປຸ່ມມີແຕ່ຂອບ
       size="icon" // ປຸ່ມສີ່ຫຼ່ຽມນ້ອຍ ສຳລັບໃສ່ໄອຄອນ
       onClick={toggleTheme} // ກົດແລ້ວເອີ້ນ toggleTheme
-      aria-label="ສະຫຼັບ dark mode" // ຄຳອະທິບາຍສຳລັບໂປຣແກຣມອ່ານໜ້າຈໍ (ຄົນຕາບອດ)
+      aria-label={t.toggle.theme} // ຄຳອະທິບາຍສຳລັບໂປຣແກຣມອ່ານໜ້າຈໍ (ຄົນຕາບອດ)
     >
       {/* ສະແດງໄອຄອນຕາມໂໝດ ໂດຍໃຊ້ Tailwind:
           dark:hidden       = ເຊື່ອງໄວ້ຕອນ dark mode (ສະແດງດວງຈັນຕອນ light)

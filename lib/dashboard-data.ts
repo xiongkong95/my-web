@@ -83,16 +83,16 @@ export type Order = {
   customer: string; // ຊື່ລູກຄ້າ
   car: string; // ລົດທີ່ສັ່ງ
   price: number; // ລາຄາ (ໂດລາ)
-  date: string; // ວັນທີ
+  date: string; // ວັນທີ ແບບ "ປີ-ເດືອນ-ວັນ" ເຊັ່ນ "2026-11-17" (ສະແດງຕາມພາສາດ້ວຍ formatDate)
   status: "paid" | "pending";
 };
 
 export const recentOrders: Order[] = [
-  { id: "#1042", customer: "Somchai Phommavong", car: "Toyota Fortuner", price: 52800, date: "17 Nov 2026", status: "paid" },
-  { id: "#1041", customer: "Noy Sisouphanh", car: "Honda Civic", price: 31200, date: "16 Nov 2026", status: "pending" },
-  { id: "#1040", customer: "Khamla Vongsa", car: "Toyota Hilux Revo", price: 33800, date: "15 Nov 2026", status: "paid" },
-  { id: "#1039", customer: "Bounmy Keomany", car: "Ford Ranger", price: 35200, date: "14 Nov 2026", status: "paid" },
-  { id: "#1038", customer: "Vilay Inthavong", car: "Mazda 3", price: 27900, date: "12 Nov 2026", status: "pending" },
+  { id: "#1042", customer: "Somchai Phommavong", car: "Toyota Fortuner", price: 52800, date: "2026-11-17", status: "paid" },
+  { id: "#1041", customer: "Noy Sisouphanh", car: "Honda Civic", price: 31200, date: "2026-11-16", status: "pending" },
+  { id: "#1040", customer: "Khamla Vongsa", car: "Toyota Hilux Revo", price: 33800, date: "2026-11-15", status: "paid" },
+  { id: "#1039", customer: "Bounmy Keomany", car: "Ford Ranger", price: 35200, date: "2026-11-14", status: "paid" },
+  { id: "#1038", customer: "Vilay Inthavong", car: "Mazda 3", price: 27900, date: "2026-11-12", status: "pending" },
 ];
 
 // ---------- ກຣາຟຍອດຂາຍ ----------

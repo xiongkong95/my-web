@@ -2,49 +2,58 @@
 // ກາດສະຖິຕິ 4 ອັນ — ລົດໃນສາງ, ຂາຍໄດ້ເດືອນນີ້, ລາຍຮັບ, ລູກຄ້າໃໝ່
 // ---------------------------------------------------------------------
 // ແຕ່ລະກາດມີ: ໄອຄອນ + ຫົວຂໍ້ + ຕົວເລກ + % ປ່ຽນແປງທຽບກັບເດືອນກ່ອນ
+// ຂໍ້ຄວາມມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ)
 // =====================================================================
+
+// ຕ້ອງໃຊ້ "use client" ເພາະໃຊ້ useLanguage() (ພາສາປ່ຽນໄດ້ໃນ browser)
+"use client";
 
 import { Banknote, Car, Handshake, UserPlus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { formatKipShort, formatUSD, stats } from "@/lib/dashboard-data";
-
-// ລາຍການກາດ: ເກັບເປັນ array ແລ້ວໃຊ້ .map() ສ້າງກາດ ຈະໄດ້ບໍ່ຕ້ອງຂຽນຊ້ຳ 4 ເທື່ອ
-//   label = ຫົວຂໍ້, icon = ໄອຄອນ
-//   value = ຕົວເລກໃຫຍ່, sub = ຂໍ້ຄວາມນ້ອຍຂ້າງລຸ່ມ (ວ່າງໄດ້)
-//   change = % ປ່ຽນແປງ
-const cards = [
-  {
-    label: "Cars in stock",
-    icon: Car,
-    value: `${stats.carsInStock.value} ຄັນ`,
-    sub: "",
-    change: stats.carsInStock.change,
-  },
-  {
-    label: "Sold this month",
-    icon: Handshake,
-    value: `${stats.soldThisMonth.value} ຄັນ`,
-    sub: "",
-    change: stats.soldThisMonth.change,
-  },
-  {
-    // ລາຍຮັບ: ສະແດງທັງ ກີບ (ໃຫຍ່) ແລະ ໂດລາ (ນ້ອຍ)
-    label: "Revenue",
-    icon: Banknote,
-    value: formatKipShort(stats.revenue.value),
-    sub: formatUSD(stats.revenue.value),
-    change: stats.revenue.change,
-  },
-  {
-    label: "New customers",
-    icon: UserPlus,
-    value: `${stats.newCustomers.value} ຄົນ`,
-    sub: "",
-    change: stats.newCustomers.change,
-  },
-];
+import { useLanguage } from "@/components/language-provider";
 
 export function StatCards() {
+  // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
+  const { t } = useLanguage();
+
+  // ລາຍການກາດ: ເກັບເປັນ array ແລ້ວໃຊ້ .map() ສ້າງກາດ ຈະໄດ້ບໍ່ຕ້ອງຂຽນຊ້ຳ 4 ເທື່ອ
+  // (ສ້າງໃນ component ເພາະຂໍ້ຄວາມປ່ຽນຕາມພາສາ)
+  //   label = ຫົວຂໍ້, icon = ໄອຄອນ
+  //   value = ຕົວເລກໃຫຍ່, sub = ຂໍ້ຄວາມນ້ອຍຂ້າງລຸ່ມ (ວ່າງໄດ້)
+  //   change = % ປ່ຽນແປງ
+  const cards = [
+    {
+      label: t.stats.carsInStock,
+      icon: Car,
+      value: `${stats.carsInStock.value} ${t.stats.carsUnit}`,
+      sub: "",
+      change: stats.carsInStock.change,
+    },
+    {
+      label: t.stats.soldThisMonth,
+      icon: Handshake,
+      value: `${stats.soldThisMonth.value} ${t.stats.carsUnit}`,
+      sub: "",
+      change: stats.soldThisMonth.change,
+    },
+    {
+      // ລາຍຮັບ: ສະແດງທັງ ກີບ (ໃຫຍ່) ແລະ ໂດລາ (ນ້ອຍ)
+      label: t.stats.revenue,
+      icon: Banknote,
+      value: formatKipShort(stats.revenue.value),
+      sub: formatUSD(stats.revenue.value),
+      change: stats.revenue.change,
+    },
+    {
+      label: t.stats.newCustomers,
+      icon: UserPlus,
+      value: `${stats.newCustomers.value} ${t.stats.peopleUnit}`,
+      sub: "",
+      change: stats.newCustomers.change,
+    },
+  ];
+
   return (
     // grid: ມືຖື 1 ຖັນ, ຈໍກາງ (sm) 2 ຖັນ, ຈໍໃຫຍ່ (xl) 4 ຖັນ
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -77,7 +86,7 @@ export function StatCards() {
                 {isUp ? "+" : ""}
                 {card.change}%
               </span>{" "}
-              vs last month
+              {t.stats.vsLastMonth}
             </p>
           </Card>
         );

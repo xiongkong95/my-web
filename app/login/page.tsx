@@ -25,12 +25,15 @@ import { AuthShell } from "@/components/auth-shell"; // ໂຄງຮ່າງໜ
 import { GoogleButton } from "@/components/google-button"; // ເສັ້ນແບ່ງ + ປຸ່ມ Google
 import { isValidEmail, normalizeEmail } from "@/lib/email"; // ຟັງຊັນກວດ email
 import { loadUser, setLoggedIn } from "@/lib/user"; // ອ່ານບັນຊີ + ຈື່ວ່າ Login ແລ້ວ
+import { useLanguage } from "@/components/language-provider"; // ຂໍ້ຄວາມຕາມພາສາ (ລາວ/ອັງກິດ)
 
 // =====================================================================
 // Component ຫຼັກຂອງໜ້າ Login
 // =====================================================================
 export default function LoginPage() {
   const router = useRouter(); // ໃຊ້ປ່ຽນໜ້າ
+  // t = ຂໍ້ຄວາມທັງໝົດຕາມພາສາທີ່ເລືອກ (ເບິ່ງ lib/translations.ts)
+  const { t } = useLanguage();
 
   // ---------- State ----------
   const [email, setEmail] = useState(""); // email ທີ່ພິມ
@@ -44,20 +47,20 @@ export default function LoginPage() {
 
     // ຂັ້ນ 1: ກວດວ່າປ້ອນຄົບບໍ່ ("||" = "ຫຼື")
     if (email === "" || password === "") {
-      setError("ກະລຸນາປ້ອນ Email ແລະ Password");
+      setError(t.login.errEmpty);
       return; // ຢຸດ ບໍ່ເຮັດຕໍ່
     }
 
     // ຂັ້ນ 2: ກວດຮູບແບບ email ("!" = "ບໍ່", ຄື ຖ້າ email ບໍ່ຖືກຕ້ອງ)
     if (!isValidEmail(email)) {
-      setError("Email ບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: noy@gmail.com)");
+      setError(t.fields.errEmailInvalid);
       return;
     }
 
     // ຂັ້ນ 3: ກວດວ່າເຄີຍ Register ແລ້ວບໍ່
     const user = loadUser();
     if (user === null) {
-      setError("ຍັງບໍ່ມີບັນຊີ ກະລຸນາ Sign up ກ່ອນ");
+      setError(t.login.errNoAccount);
       return;
     }
 
@@ -66,7 +69,7 @@ export default function LoginPage() {
     // ເຊັ່ນ "Noy@Gmail.com" ກັບ "noy@gmail.com" ຖືວ່າເປັນ email ດຽວກັນ
     const sameEmail = normalizeEmail(email) === user.email;
     if (!sameEmail || password !== user.password) {
-      setError("Email ຫຼື Password ບໍ່ຖືກຕ້ອງ");
+      setError(t.login.errWrong);
       return;
     }
 
@@ -79,14 +82,14 @@ export default function LoginPage() {
   return (
     // AuthShell ສ້າງພື້ນຫຼັງ, ກາດ, ໂລໂກ້ ແລະຫົວຂໍ້ໃຫ້
     // ສິ່ງທີ່ຢູ່ລະຫວ່າງ <AuthShell> ... </AuthShell> ຈະຖືກໃສ່ເຂົ້າໄປໃນກາດ
-    <AuthShell title="Welcome back">
+    <AuthShell title={t.login.title}>
       {/* ----- ຟອມ Login ----- */}
       {/* noValidate = ປິດການກວດອັດຕະໂນມັດຂອງ browser
           ເພື່ອໃຫ້ສະແດງຂໍ້ຄວາມ error ພາສາລາວຂອງເຮົາເອງແທນ */}
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
         {/* ===== ຊ່ອງ Email ===== */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t.fields.email}</Label>
           {/* relative = ໃຫ້ໄອຄອນວາງຊ້ອນຢູ່ໃນຊ່ອງພິມໄດ້ */}
           <div className="relative">
             {/* ໄອຄອນຊອງຈົດໝາຍ ວາງຢູ່ຊ້າຍໃນຊ່ອງ
@@ -95,7 +98,7 @@ export default function LoginPage() {
             <Input
               id="email"
               type="email" // email = ມືຖືຈະເປີດແປ້ນພິມທີ່ມີປຸ່ມ @
-              placeholder="you@example.com"
+              placeholder={t.fields.emailPlaceholder}
               // h-11 = ສູງຂຶ້ນ, pl-10 = ເວັ້ນຊ້າຍໃຫ້ໄອຄອນ
               className="h-11 pl-10"
               value={email}
@@ -106,7 +109,7 @@ export default function LoginPage() {
 
         {/* ===== ຊ່ອງ Password ===== */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t.fields.password}</Label>
           <div className="relative">
             {/* ໄອຄອນກະແຈ ຢູ່ຊ້າຍ */}
             <Lock className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -114,7 +117,7 @@ export default function LoginPage() {
               id="password"
               // ຖ້າ showPassword ເປັນ true ສະແດງເປັນຕົວໜັງສື, ຖ້າ false ເຊື່ອງເປັນ ●●●
               type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
+              placeholder={t.fields.passwordPlaceholder}
               className="h-11 pr-10 pl-10" // pr-10 = ເວັ້ນຂວາໃຫ້ປຸ່ມຕາ
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -126,7 +129,7 @@ export default function LoginPage() {
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showPassword ? "ເຊື່ອງລະຫັດຜ່ານ" : "ສະແດງລະຫັດຜ່ານ"}
+              aria-label={showPassword ? t.fields.hidePassword : t.fields.showPassword}
             >
               {/* ສະແດງໄອຄອນຕາມສະຖານະ: ເປີດຢູ່ → ຕາປິດ, ປິດຢູ່ → ຕາເປີດ */}
               {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -136,7 +139,7 @@ export default function LoginPage() {
           {/* ລິ້ງລືມລະຫັດຜ່ານ: ຈັດຢູ່ຂວາ (self-end), ສີທອງ
               href="#" = ຍັງບໍ່ມີໜ້ານີ້ */}
           <Link href="#" className="self-end text-sm text-primary hover:underline">
-            Forgot password?
+            {t.login.forgot}
           </Link>
         </div>
 
@@ -149,7 +152,7 @@ export default function LoginPage() {
           type="submit"
           className="relative h-11 w-full bg-linear-to-r from-primary to-primary/75 text-base hover:opacity-90"
         >
-          Login
+          {t.login.submit}
           {/* ລູກສອນ ວາງຢູ່ຂວາສຸດຂອງປຸ່ມ */}
           <ArrowRight className="absolute right-4" />
         </Button>
@@ -160,10 +163,9 @@ export default function LoginPage() {
 
       {/* ----- ລິ້ງໄປໜ້າ Register ----- */}
       <p className="mt-8 text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
-        {/* &apos; = ເຄື່ອງໝາຍ ' (ຕ້ອງຂຽນແບບນີ້ໃນ JSX) */}
+        {t.login.noAccount}{" "}
         <Link href="/register" className="text-primary hover:underline">
-          Sign up
+          {t.login.signUp}
         </Link>
       </p>
     </AuthShell>

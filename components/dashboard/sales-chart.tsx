@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------
 // - ກົດປຸ່ມ 1W / 1M / 6M / 1Y ເພື່ອປ່ຽນຊ່ວງເວລາ
 // - ເລື່ອນເມົ້າໃສ່ກຣາຟ ຈະເຫັນ tooltip ບອກຍອດຂາຍ ທັງ ກີບ ແລະ ໂດລາ
+// - ປ້າຍແກນລຸ່ມ (ວັນ/ເດືອນ) ແປຕາມພາສາດ້ວຍ translateLabel
 // ໃຊ້ shadcn Chart (ຂ້າງໃນແມ່ນ library ຊື່ recharts)
 // =====================================================================
 
@@ -22,17 +23,23 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { formatKip, formatKipShort, formatUSD, sales, type ChartRange } from "@/lib/dashboard-data";
+import { translateLabel } from "@/lib/translations";
+import { useLanguage } from "@/components/language-provider";
 
 // ປຸ່ມເລືອກຊ່ວງເວລາ
 const ranges: ChartRange[] = ["1W", "1M", "6M", "1Y"];
 
-// ຕັ້ງຄ່າກຣາຟ: ຂໍ້ມູນ "value" ໃຫ້ຊື່ວ່າ "Sales" ແລະໃຊ້ສີ primary (ສີທອງ)
-// ChartContainer ຈະສ້າງ CSS variable ຊື່ --color-value ໃຫ້ເຮົາໃຊ້
-const chartConfig = {
-  value: { label: "Sales", color: "var(--primary)" },
-} satisfies ChartConfig;
-
 export function SalesChart() {
+  // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
+  const { t } = useLanguage();
+
+  // ຕັ້ງຄ່າກຣາຟ: ຂໍ້ມູນ "value" ໃຫ້ຊື່ວ່າ "ຍອດຂາຍ" ແລະໃຊ້ສີ primary (ສີທອງ)
+  // ChartContainer ຈະສ້າງ CSS variable ຊື່ --color-value ໃຫ້ເຮົາໃຊ້
+  // (ສ້າງໃນ component ເພາະຊື່ label ປ່ຽນຕາມພາສາ)
+  const chartConfig = {
+    value: { label: t.chart.sales, color: "var(--primary)" },
+  } satisfies ChartConfig;
+
   // ຊ່ວງເວລາທີ່ເລືອກຢູ່ (ເລີ່ມຕົ້ນ = 6M)
   const [range, setRange] = useState<ChartRange>("6M");
 
@@ -48,7 +55,7 @@ export function SalesChart() {
       {/* ----- ແຖວຫົວ: ຫົວຂໍ້ + ຍອດລວມ + ປຸ່ມເລືອກຊ່ວງເວລາ ----- */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="font-medium">Sales Overview</h3>
+          <h3 className="font-medium">{t.chart.title}</h3>
           {/* ຍອດລວມ: ກີບ (ໃຫຍ່) + ໂດລາ (ນ້ອຍ) */}
           <p className="mt-1 text-2xl font-semibold">{formatKip(total)}</p>
           <p className="text-sm text-muted-foreground">≈ {formatUSD(total)}</p>
@@ -88,8 +95,14 @@ export function SalesChart() {
           {/* ເສັ້ນຕາຕະລາງແນວນອນ (vertical={false} = ບໍ່ມີເສັ້ນຕັ້ງ) */}
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
 
-          {/* ແກນນອນ: ໃຊ້ຄ່າ label ຂອງແຕ່ລະຈຸດ, ບໍ່ມີເສັ້ນແກນ */}
-          <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} />
+          {/* ແກນນອນ: ໃຊ້ຄ່າ label ຂອງແຕ່ລະຈຸດ ແລ້ວແປຕາມພາສາ, ບໍ່ມີເສັ້ນແກນ */}
+          <XAxis
+            dataKey="label"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            tickFormatter={(label: string) => translateLabel(t, label)}
+          />
 
           {/* ແກນຕັ້ງ: ສະແດງເປັນກີບແບບສັ້ນ ເຊັ່ນ "6.45B ₭"
               tickFormatter = ຟັງຊັນປ່ຽນຮູບແບບຕົວເລກ */}
@@ -104,6 +117,8 @@ export function SalesChart() {
           <ChartTooltip
             content={
               <ChartTooltipContent
+                // labelFormatter = ແປຫົວຂໍ້ tooltip (ວັນ/ເດືອນ) ຕາມພາສາ
+                labelFormatter={(label) => translateLabel(t, String(label))}
                 formatter={(value) => `${formatKip(Number(value))} (${formatUSD(Number(value))})`}
                 indicator="line"
               />

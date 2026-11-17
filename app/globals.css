@@ -29,7 +29,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  /* font ຫຼັກ: Geist ສຳລັບຕົວອັງກິດ/ຕົວເລກ, ຖ້າເປັນຕົວລາວ browser ຈະໃຊ້ Noto Sans Lao ແທນ */
+  --font-sans: var(--font-geist-sans), var(--font-noto-sans-lao), sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);

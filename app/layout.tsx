@@ -2,12 +2,13 @@
 // Root Layout (ໂຄງຮ່າງຫຼັກຂອງທຸກໜ້າ)
 // ---------------------------------------------------------------------
 // ໄຟລ໌ນີ້ຫໍ່ຫຸ້ມທຸກໜ້າໃນເວັບ (Login, Register, Dashboard)
-// ສິ່ງທີ່ໃສ່ໃນນີ້ ຈະສະແດງທຸກໜ້າ ເຊັ່ນ: font, ສີພື້ນຫຼັງ
+// ສິ່ງທີ່ໃສ່ໃນນີ້ ຈະສະແດງທຸກໜ້າ ເຊັ່ນ: font, ສີພື້ນຫຼັງ, ລະບົບພາສາ
 // =====================================================================
 
 // ---------- ສ່ວນ import ----------
 import type { Metadata } from "next"; // ປະເພດຂໍ້ມູນສຳລັບ metadata (title ຂອງແທັບ browser)
-import { Geist, Geist_Mono } from "next/font/google"; // ໂຫຼດ font ຈາກ Google Fonts
+import { Geist, Geist_Mono, Noto_Sans_Lao } from "next/font/google"; // ໂຫຼດ font ຈາກ Google Fonts
+import { LanguageProvider } from "@/components/language-provider"; // ລະບົບສະຫຼັບພາສາ ລາວ/ອັງກິດ
 import "./globals.css"; // ໄຟລ໌ CSS ຫຼັກ (ມີສີ theme ຢູ່ໃນນີ້)
 
 // ---------- ຕັ້ງຄ່າ font ----------
@@ -15,6 +16,13 @@ import "./globals.css"; // ໄຟລ໌ CSS ຫຼັກ (ມີສີ theme ຢ
 const geistSans = Geist({
   variable: "--font-geist-sans", // font ປົກກະຕິ
   subsets: ["latin"],
+});
+
+// font ພາສາລາວ: Geist ບໍ່ມີຕົວອັກສອນລາວ ຈຶ່ງຕ້ອງໂຫຼດ Noto Sans Lao ເພີ່ມ
+// subsets: ["lao"] = ໂຫຼດສະເພາະຕົວອັກສອນລາວ (ໄຟລ໌ນ້ອຍ ໂຫຼດໄວ)
+const notoSansLao = Noto_Sans_Lao({
+  variable: "--font-noto-sans-lao",
+  subsets: ["lao"],
 });
 
 const geistMono = Geist_Mono({
@@ -37,15 +45,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // h-full = ສູງເຕັມຈໍ, antialiased = ເຮັດໃຫ້ຕົວໜັງສືລຽບງາມ
     // ປຸ່ມ dark mode ຈະເພີ່ມ class "dark" ໃສ່ແທັກນີ້
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="lo" // ພາສາຫຼັກຂອງເວັບ = ລາວ (LanguageProvider ຈະປ່ຽນໃຫ້ ເມື່ອເລືອກ EN)
+      className={`${geistSans.variable} ${notoSansLao.variable} ${geistMono.variable} h-full antialiased`}
     >
       {/* bg-background = ພື້ນຫຼັງຕາມ theme (light = ຂາວ, dark = ມືດ)
           ໝາຍເຫດ: ບໍ່ໃຊ້ສີໂປ່ງໃສ ເຊັ່ນ bg-muted/40 ເພາະໃນ dark mode ຈະເຫັນພື້ນຂາວທະລຸອອກມາ */}
       <body className="min-h-full flex flex-col bg-background">
         {/* ເນື້ອໃນຂອງໜ້າປັດຈຸບັນ
             (ປຸ່ມ dark mode ຢູ່ໃນແຕ່ລະໜ້າເອງ ເພາະແຕ່ລະໜ້າວາງຕຳແໜ່ງຕ່າງກັນ) */}
-        {children}
+        {/* LanguageProvider ຫໍ່ທຸກໜ້າ ເພື່ອໃຫ້ທຸກ component ຮູ້ພາສາປັດຈຸບັນ */}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

@@ -9,6 +9,15 @@
 - **Dashboard** (`/dashboard`): ພາບລວມຂອງຮ້ານ ສຳລັບເຈົ້າຂອງຮ້ານ: ກາດສະຖິຕິ (ລົດໃນສາງ, ຂາຍໄດ້, ລາຍຮັບ, ລູກຄ້າໃໝ່), ກຣາຟຍອດຂາຍ (shadcn Chart), ລົດຂາຍດີ ແລະລາຍການສັ່ງຊື້ລ່າສຸດ. ລາຄາສະແດງທັງ ກີບ (₭) ແລະ ໂດລາ ($). ຕ້ອງ Login ກ່ອນຈຶ່ງເຂົ້າໄດ້
 - **Theme ຂອງຕົນເອງ**: ສີທອງ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
 - **Dark mode**: ກົດປຸ່ມ 🌙 ຢູ່ມຸມຂວາເທິງ
+- **2 ພາສາ**: ພາສາລາວເປັນຫຼັກ, ກົດປຸ່ມ `EN` ເພື່ອປ່ຽນເປັນພາສາອັງກິດ (ກົດ `ລາວ` ເພື່ອປ່ຽນຄືນ). ເວັບຈະຈື່ພາສາທີ່ເລືອກໄວ້
+
+## 🌐 ແກ້ຂໍ້ຄວາມ / ຄຳແປ
+
+ຂໍ້ຄວາມທັງໝົດຂອງເວັບ (ທັງ 2 ພາສາ) ຢູ່ໃນໄຟລ໌ດຽວ: `lib/translations.ts`
+
+- `lo` = ພາສາລາວ, `en` = ພາສາອັງກິດ
+- ເພີ່ມຂໍ້ຄວາມໃໝ່: ເພີ່ມ key ດຽວກັນໃນທັງ `lo` ແລະ `en` (ຖ້າລືມ, TypeScript ຈະແຈ້ງ error)
+- ຊື່ຮ້ານ, ຊື່ລຸ້ນລົດ ແລະຊື່ລູກຄ້າ ບໍ່ແປ
 
 > ໝາຍເຫດ: Login/Register ເປັນການຈຳລອງ ເກັບຂໍ້ມູນໃນ localStorage ຂອງ browser ບໍ່ໄດ້ເຊື່ອມກັບ database
 > (ເວັບແທ້ຫ້າມເກັບ password ແບບນີ້)
@@ -57,7 +66,7 @@ app/
 ├── login/page.tsx      → ໜ້າ Login
 ├── register/page.tsx   → ໜ້າ Register
 ├── dashboard/page.tsx  → ໜ້າ Dashboard
-├── layout.tsx          → layout ຫຼັກ + ປຸ່ມ dark mode
+├── layout.tsx          → layout ຫຼັກ + font ລາວ + ລະບົບພາສາ
 └── globals.css         → ສີ theme
 components/
 ├── ui/                 → components ຂອງ shadcn
@@ -65,10 +74,13 @@ components/
 │                         ກຣາຟຍອດຂາຍ, ລົດຂາຍດີ, ລາຍການສັ່ງຊື້, ຮູບລົດ)
 ├── auth-shell.tsx      → ໂຄງຮ່າງຮ່ວມຂອງໜ້າ Login/Register
 ├── google-button.tsx   → ເສັ້ນແບ່ງ + ປຸ່ມ Google
+├── language-provider.tsx → ລະບົບພາສາ (React Context + useLanguage)
+├── language-toggle.tsx → ປຸ່ມສະຫຼັບພາສາ ລາວ/EN
 ├── icons.tsx           → ໂລໂກ້ລົດ ແລະໄອຄອນ SVG
 └── theme-toggle.tsx    → ປຸ່ມສະຫຼັບ dark mode
 lib/
 ├── email.ts            → ຟັງຊັນກວດ email
+├── translations.ts     → ຂໍ້ຄວາມທັງໝົດ ພາສາລາວ + ອັງກິດ
 ├── user.ts             → ບັນທຶກ/ອ່ານບັນຊີ ແລະສະຖານະ Login ໃນ localStorage
 └── dashboard-data.ts   → ຂໍ້ມູນສົມມຸດຂອງ Dashboard + ຟັງຊັນສະແດງລາຄາ ₭ / $
 public/

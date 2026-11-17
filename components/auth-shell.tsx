@@ -5,16 +5,21 @@
 // ສິ່ງທີ່ມີໃນນີ້:
 //   - ພື້ນຫຼັງມືດ ລາຍເສັ້ນ blueprint ເຕັມໜ້າຈໍ
 //   - ຮູບລົດໃຫຍ່ + ຊື່ຮ້ານ + ຄຳຂວັນ ດ້ານຊ້າຍ (ສະແດງສະເພາະຈໍໃຫຍ່)
-//   - ກາດດ້ານຂວາ + ປຸ່ມ dark mode + ໂລໂກ້ລົດ + ຊື່ຮ້ານ + ຫົວຂໍ້
+//   - ກາດດ້ານຂວາ + ປຸ່ມພາສາ + ປຸ່ມ dark mode + ໂລໂກ້ລົດ + ຊື່ຮ້ານ + ຫົວຂໍ້
 //   - ເນື້ອໃນ (children) ເຊັ່ນ ຟອມ ຈະຖືກໃສ່ເຂົ້າໄປໃນກາດ
 // ວິທີໃຊ້:
-//   <AuthShell title="Welcome back">
+//   <AuthShell title={t.login.title}>
 //     ...ຟອມຂອງເຈົ້າ...
 //   </AuthShell>
 // =====================================================================
 
+// ຕ້ອງໃຊ້ "use client" ເພາະໃຊ້ useLanguage() (ພາສາປ່ຽນໄດ້ໃນ browser)
+"use client";
+
 import { CarLogo } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
+import { useLanguage } from "@/components/language-provider";
 
 // ປະເພດຂອງ props ທີ່ component ນີ້ຮັບ:
 //   title    = ຫົວຂໍ້ໃຫຍ່ໃນກາດ (string = ຂໍ້ຄວາມ)
@@ -25,6 +30,9 @@ type AuthShellProps = {
 };
 
 export function AuthShell({ title, children }: AuthShellProps) {
+  // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ (ລາວ ຫຼື ອັງກິດ)
+  const { t } = useLanguage();
+
   return (
     // ກ່ອງໃຫຍ່ເຕັມຈໍ ພື້ນສີດຳ (zinc-950) ທັງໜ້າ
     // relative + overflow-hidden = ໃຫ້ລາຍເສັ້ນດ້ານຫຼັງຢູ່ໃນກ່ອງນີ້ ບໍ່ລົ້ນອອກ
@@ -52,8 +60,8 @@ export function AuthShell({ title, children }: AuthShellProps) {
         <div className="flex flex-col gap-2">
           {/* tracking-widest = ຫ່າງຕົວອັກສອນ, uppercase = ຕົວໃຫຍ່ທັງໝົດ */}
           <p className="text-sm tracking-widest text-primary uppercase">Moora Auto Service</p>
-          <p className="text-3xl font-medium text-zinc-200">Find your dream car</p>
-          <p className="text-zinc-400">ລົດໃໝ່ຄຸນນະພາບ ພ້ອມບໍລິການຫຼັງການຂາຍ</p>
+          <p className="text-3xl font-medium text-zinc-200">{t.auth.tagline}</p>
+          <p className="text-zinc-400">{t.auth.subtagline}</p>
         </div>
       </div>
 
@@ -65,8 +73,9 @@ export function AuthShell({ title, children }: AuthShellProps) {
             shadow-[...] = ເງົາສີທອງອ່ອນໆ ດ້ານຂວາ
             relative = ໃຫ້ປຸ່ມ dark mode ວາງຕຳແໜ່ງອີງໃສ່ກາດນີ້ໄດ້ */}
         <div className="relative w-full max-w-md rounded-2xl border bg-card px-8 py-12 shadow-[12px_0_48px_-16px_rgba(217,176,122,0.35)]">
-          {/* ປຸ່ມ dark mode ຢູ່ມຸມຂວາເທິງຂອງກາດ */}
-          <div className="absolute top-4 right-4">
+          {/* ປຸ່ມພາສາ + ປຸ່ມ dark mode ຢູ່ມຸມຂວາເທິງຂອງກາດ */}
+          <div className="absolute top-4 right-4 flex gap-2">
+            <LanguageToggle />
             <ThemeToggle />
           </div>
 

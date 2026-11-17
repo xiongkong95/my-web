@@ -2,10 +2,14 @@
 // Sidebar — ແຖບເມນູດ້ານຊ້າຍຂອງ Dashboard
 // ---------------------------------------------------------------------
 // - ເທິງ: ໂລໂກ້ລົດ + ຊື່ຮ້ານ "Moora Auto Service"
-// - ກາງ: ເມນູຫຼັກ (Dashboard, Cars, Orders, ...)
-// - ລຸ່ມ: Settings, Support, Logout
+// - ກາງ: ເມນູຫຼັກ (ໜ້າຫຼັກ, ລົດ, ການສັ່ງຊື້, ...)
+// - ລຸ່ມ: ຕັ້ງຄ່າ, ຊ່ວຍເຫຼືອ, ອອກຈາກລະບົບ
+// ຂໍ້ຄວາມເມນູມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ)
 // ໝາຍເຫດ: ເມນູຍັງບໍ່ມີໜ້າແທ້ (href="#") ຍົກເວັ້ນ Logout (ໃຊ້ LogoutButton)
 // =====================================================================
+
+// ຕ້ອງໃຊ້ "use client" ເພາະໃຊ້ useLanguage() (ພາສາປ່ຽນໄດ້ໃນ browser)
+"use client";
 
 import Link from "next/link";
 import {
@@ -20,27 +24,34 @@ import {
 } from "lucide-react";
 import { CarLogo } from "@/components/icons";
 import { LogoutButton } from "@/components/dashboard/logout-button";
+import { useLanguage } from "@/components/language-provider";
 
-// ລາຍການເມນູຫຼັກ: label = ຂໍ້ຄວາມ, icon = ໄອຄອນ, active = ເປັນໜ້າປັດຈຸບັນບໍ່
+// ລາຍການເມນູຫຼັກ:
+//   key = ຊື່ຂໍ້ຄວາມໃນ t.menu (ເຊັ່ນ "cars" → t.menu.cars = "ລົດ")
+//   icon = ໄອຄອນ, active = ເປັນໜ້າປັດຈຸບັນບໍ່
+// "as const" = ບອກ TypeScript ວ່າ key ມີແຕ່ຄ່າເຫຼົ່ານີ້ (ຈະໄດ້ໃຊ້ t.menu[item.key] ໄດ້)
 const mainMenu = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Cars", icon: Car, active: false }, // ລົດທັງໝົດໃນສາງ
-  { label: "Orders", icon: ClipboardList, active: false }, // ການສັ່ງຊື້
-  { label: "Customers", icon: Users, active: false }, // ລູກຄ້າ
-  { label: "Reports", icon: ChartColumn, active: false }, // ລາຍງານ
-];
+  { key: "dashboard", icon: LayoutDashboard, active: true },
+  { key: "cars", icon: Car, active: false }, // ລົດທັງໝົດໃນສາງ
+  { key: "orders", icon: ClipboardList, active: false }, // ການສັ່ງຊື້
+  { key: "customers", icon: Users, active: false }, // ລູກຄ້າ
+  { key: "reports", icon: ChartColumn, active: false }, // ລາຍງານ
+] as const;
 
 // ເມນູດ້ານລຸ່ມ
 const bottomMenu = [
-  { label: "Settings", icon: Settings },
-  { label: "Support", icon: LifeBuoy },
-];
+  { key: "settings", icon: Settings },
+  { key: "support", icon: LifeBuoy },
+] as const;
 
 // class ຂອງແຕ່ລະແຖວເມນູ (ໃຊ້ຊ້ຳ ຈຶ່ງເກັບໄວ້ໃນຕົວແປ)
 const itemClass =
   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 
 export function Sidebar() {
+  // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
+  const { t } = useLanguage();
+
   return (
     // aside = ແທັກສຳລັບເນື້ອຫາດ້ານຂ້າງ
     // hidden lg:flex = ເຊື່ອງໃນມືຖື, ສະແດງສະເພາະຈໍໃຫຍ່
@@ -65,7 +76,7 @@ export function Sidebar() {
           const Icon = item.icon;
           return (
             <Link
-              key={item.label}
+              key={item.key}
               href="#"
               // ຖ້າເປັນເມນູທີ່ເລືອກຢູ່ (active): ພື້ນສີທອງອ່ອນ + ຕົວໜັງສືສີທອງ
               className={
@@ -75,7 +86,7 @@ export function Sidebar() {
               }
             >
               <Icon className="size-4" />
-              {item.label}
+              {t.menu[item.key]}
             </Link>
           );
         })}
@@ -86,16 +97,16 @@ export function Sidebar() {
         {bottomMenu.map((item) => {
           const Icon = item.icon;
           return (
-            <Link key={item.label} href="#" className={itemClass}>
+            <Link key={item.key} href="#" className={itemClass}>
               <Icon className="size-4" />
-              {item.label}
+              {t.menu[item.key]}
             </Link>
           );
         })}
         {/* Logout: ລຶບສະຖານະ Login ແລ້ວກັບໄປໜ້າ Login */}
         <LogoutButton className={itemClass}>
           <LogOut className="size-4" />
-          Logout
+          {t.menu.logout}
         </LogoutButton>
       </div>
     </aside>
