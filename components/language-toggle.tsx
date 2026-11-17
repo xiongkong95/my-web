@@ -19,7 +19,8 @@ export function LanguageToggle() {
     <Button
       variant="outline"
       size="icon"
-      className="text-xs font-semibold"
+      // rounded-full = ວົງມົນ (ໃຫ້ຄືກັບປຸ່ມອື່ນໃນ Dashboard)
+      className="rounded-full text-xs font-semibold"
       // ກົດແລ້ວ: ຖ້າເປັນລາວ ປ່ຽນເປັນອັງກິດ, ຖ້າເປັນອັງກິດ ປ່ຽນເປັນລາວ
       onClick={() => setLang(lang === "lo" ? "en" : "lo")}
       aria-label={t.toggle.switchAria}

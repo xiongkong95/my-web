@@ -44,7 +44,8 @@ export function ThemeToggle() {
   return (
     <Button
       variant="outline" // ຮູບແບບປຸ່ມມີແຕ່ຂອບ
-      size="icon" // ປຸ່ມສີ່ຫຼ່ຽມນ້ອຍ ສຳລັບໃສ່ໄອຄອນ
+      size="icon" // ປຸ່ມນ້ອຍ ສຳລັບໃສ່ໄອຄອນ
+      className="rounded-full" // ວົງມົນ (ໃຫ້ຄືກັບປຸ່ມ 🔔 ⚙️ ໃນ Dashboard)
       onClick={toggleTheme} // ກົດແລ້ວເອີ້ນ toggleTheme
       aria-label={t.toggle.theme} // ຄຳອະທິບາຍສຳລັບໂປຣແກຣມອ່ານໜ້າຈໍ (ຄົນຕາບອດ)
     >
