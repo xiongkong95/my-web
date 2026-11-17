@@ -6,7 +6,7 @@
 
 // ---------- ໂລໂກ້ຮູບກ້ອນລູກບາດ ----------
 // className ສົ່ງເຂົ້າມາເພື່ອກຳນົດຂະໜາດ/ສີ ຈາກບ່ອນທີ່ເອີ້ນໃຊ້
-// ຕົວຢ່າງ: <CubeLogo className="size-16 text-[#d9b07a]" />
+// ຕົວຢ່າງ: <CubeLogo className="size-16 text-primary" />
 export function CubeLogo({ className }: { className?: string }) {
   return (
     <svg

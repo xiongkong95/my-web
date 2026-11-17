@@ -64,7 +64,7 @@ export function AuthShell({ title, children }: AuthShellProps) {
 
           {/* ໂລໂກ້ສີທອງ + ຫົວຂໍ້ (ຮັບມາຈາກ props title) */}
           <div className="mb-8 flex flex-col items-center gap-4">
-            <CubeLogo className="size-16 text-[#d9b07a]" />
+            <CubeLogo className="size-16 text-primary" />
             <h1 className="text-3xl font-medium">{title}</h1>
           </div>
 

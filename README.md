@@ -1,4 +1,4 @@
-# my-web
+﻿# my-web
 
 ໂປຣເຈັກວຽກບ້ານ: ໜ້າ **Login**, **Register** ແລະ **Dashboard** ສ້າງດ້ວຍ Next.js + shadcn/ui
 
@@ -7,7 +7,7 @@
 - **Login** (`/login`): ເບີໂທ + Password ຫຼື Google
 - **Register** (`/register`): ຟອມ Name, Phone number, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
 - **Dashboard** (`/dashboard`): ກາດສະຖິຕິ ແລະຕາຕະລາງ Order
-- **Theme ຂອງຕົນເອງ**: ສີເທົາ-ຂາວ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
+- **Theme ຂອງຕົນເອງ**: ສີທອງ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
 - **Dark mode**: ກົດປຸ່ມ 🌙 ຢູ່ມຸມຂວາເທິງ
 
 > ໝາຍເຫດ: Login/Register ເປັນການຈຳລອງ ບໍ່ໄດ້ເຊື່ອມກັບ database

@@ -40,8 +40,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      {/* bg-muted/40 = ພື້ນຫຼັງສີເທົາອ່ອນໆ (ຄວາມເຂັ້ມ 40%) ໃຫ້ກາດສີຂາວເດັ່ນຂຶ້ນ */}
-      <body className="min-h-full flex flex-col bg-muted/40">
+      {/* bg-background = ພື້ນຫຼັງຕາມ theme (light = ຂາວ, dark = ມືດ)
+          ໝາຍເຫດ: ບໍ່ໃຊ້ສີໂປ່ງໃສ ເຊັ່ນ bg-muted/40 ເພາະໃນ dark mode ຈະເຫັນພື້ນຂາວທະລຸອອກມາ */}
+      <body className="min-h-full flex flex-col bg-background">
         {/* ເນື້ອໃນຂອງໜ້າປັດຈຸບັນ
             (ປຸ່ມ dark mode ຢູ່ໃນແຕ່ລະໜ້າເອງ ເພາະແຕ່ລະໜ້າວາງຕຳແໜ່ງຕ່າງກັນ) */}
         {children}

@@ -183,7 +183,7 @@ export default function RegisterPage() {
         {/* ===== ປຸ່ມສ້າງບັນຊີ: ສີທອງໄລ່ສີ ຄືປຸ່ມ Login ===== */}
         <Button
           type="submit"
-          className="relative h-11 w-full bg-linear-to-r from-[#e3bf8c] to-[#b98a57] text-base text-zinc-900 hover:opacity-90"
+          className="relative h-11 w-full bg-linear-to-r from-primary to-primary/75 text-base hover:opacity-90"
         >
           Create account
           <ArrowRight className="absolute right-4" />
@@ -196,7 +196,7 @@ export default function RegisterPage() {
       {/* ----- ລິ້ງກັບໄປໜ້າ Login ----- */}
       <p className="mt-8 text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="text-[#c9a06a] hover:underline">
+        <Link href="/login" className="text-primary hover:underline">
           Login
         </Link>
       </p>

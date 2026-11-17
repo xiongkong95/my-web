@@ -15,6 +15,7 @@ import Link from "next/link"; // ລິ້ງໄປໜ້າອື່ນ
 import { buttonVariants } from "@/components/ui/button";
 // ປຸ່ມ dark mode (ເປັນ Client Component ແຕ່ເອົາມາໃຊ້ໃນ Server Component ໄດ້)
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CubeLogo } from "@/components/icons"; // ໂລໂກ້ກ້ອນລູກບາດ
 import {
   Card,
   CardContent,
@@ -51,9 +52,13 @@ export default function DashboardPage() {
       {/* ===== ສ່ວນທີ 1: ຫົວຂໍ້ + ປຸ່ມ Logout =====
           justify-between = ຫົວຂໍ້ຢູ່ຊ້າຍ, ປຸ່ມຢູ່ຂວາ */}
       <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">ຍິນດີຕ້ອນຮັບກັບມາ 👋</p>
+        {/* ໂລໂກ້ສີທອງ (ອັນດຽວກັບໜ້າ Login) + ຫົວຂໍ້ */}
+        <div className="flex items-center gap-3">
+          <CubeLogo className="size-10 text-primary" />
+          <div>
+            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <p className="text-muted-foreground">ຍິນດີຕ້ອນຮັບກັບມາ 👋</p>
+          </div>
         </div>
         {/* ປຸ່ມດ້ານຂວາ: dark mode + Logout ວາງຄຽງກັນ (gap-2 = ຫ່າງກັນໜ້ອຍໜຶ່ງ) */}
         <div className="flex items-center gap-2">
@@ -78,7 +83,8 @@ export default function DashboardPage() {
           <Card key={item.title}>
             <CardHeader>
               <CardDescription>{item.title}</CardDescription>
-              <CardTitle className="text-2xl">{item.value}</CardTitle>
+              {/* text-primary = ຕົວເລກສີທອງ ໃຫ້ເດັ່ນ */}
+              <CardTitle className="text-2xl text-primary">{item.value}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">{item.note}</p>
@@ -115,8 +121,16 @@ export default function DashboardPage() {
                   <td className="py-2">{order.customer}</td>
                   <td className="py-2">{order.amount}</td>
                   <td className="py-2">
-                    {/* ປ້າຍສະຖານະ: rounded-full = ມົນເປັນເມັດຢາ, bg-secondary = ພື້ນສີເທົາອ່ອນ */}
-                    <span className="rounded-full bg-secondary px-2 py-1 text-xs">
+                    {/* ປ້າຍສະຖານະ: rounded-full = ມົນເປັນເມັດຢາ
+                        ຖ້າສະຖານະເປັນ "ສຳເລັດ" ໃຊ້ສີທອງອ່ອນ (bg-primary/15 = ສີທອງ ຄວາມເຂັ້ມ 15%)
+                        ຖ້າບໍ່ແມ່ນ ໃຊ້ສີເທົາອ່ອນ (bg-secondary) */}
+                    <span
+                      className={
+                        order.status === "ສຳເລັດ"
+                          ? "rounded-full bg-primary/15 px-2 py-1 text-xs text-primary"
+                          : "rounded-full bg-secondary px-2 py-1 text-xs"
+                      }
+                    >
                       {order.status}
                     </span>
                   </td>

@@ -115,7 +115,7 @@ export default function LoginPage() {
 
           {/* ລິ້ງລືມລະຫັດຜ່ານ: ຈັດຢູ່ຂວາ (self-end), ສີທອງ
               href="#" = ຍັງບໍ່ມີໜ້ານີ້ */}
-          <Link href="#" className="self-end text-sm text-[#c9a06a] hover:underline">
+          <Link href="#" className="self-end text-sm text-primary hover:underline">
             Forgot password?
           </Link>
         </div>
@@ -124,10 +124,10 @@ export default function LoginPage() {
         {error && <p className="text-sm text-destructive">{error}</p>}
 
         {/* ===== ປຸ່ມ Login =====
-            bg-linear-to-r from-[...] to-[...] = ພື້ນໄລ່ສີທອງ ຈາກຊ້າຍໄປຂວາ */}
+            bg-linear-to-r from-primary to-primary/75 = ພື້ນໄລ່ສີທອງ (ສີ primary) ຈາກເຂັ້ມໄປຈາງ */}
         <Button
           type="submit"
-          className="relative h-11 w-full bg-linear-to-r from-[#e3bf8c] to-[#b98a57] text-base text-zinc-900 hover:opacity-90"
+          className="relative h-11 w-full bg-linear-to-r from-primary to-primary/75 text-base hover:opacity-90"
         >
           Login
           {/* ລູກສອນ ວາງຢູ່ຂວາສຸດຂອງປຸ່ມ */}
@@ -142,7 +142,7 @@ export default function LoginPage() {
       <p className="mt-8 text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         {/* &apos; = ເຄື່ອງໝາຍ ' (ຕ້ອງຂຽນແບບນີ້ໃນ JSX) */}
-        <Link href="/register" className="text-[#c9a06a] hover:underline">
+        <Link href="/register" className="text-primary hover:underline">
           Sign up
         </Link>
       </p>
