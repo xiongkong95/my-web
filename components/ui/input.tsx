@@ -1,3 +1,9 @@
+// =====================================================================
+// Input (ຊ່ອງພິມຂໍ້ຄວາມ) — ໄຟລ໌ນີ້ສ້າງໂດຍ shadcn (ບໍ່ຈຳເປັນຕ້ອງແກ້)
+// ເປັນ <input> ທຳມະດາ ແຕ່ຕົບແຕ່ງໄວ້ໃຫ້ງາມ ແລະເຂົ້າກັບ theme
+// ວິທີໃຊ້: <Input type="email" value={email} onChange={...} />
+// =====================================================================
+
 import * as React from "react"
 import { Input as InputPrimitive } from "@base-ui/react/input"
 import { cn } from "cn"

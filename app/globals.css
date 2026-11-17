@@ -1,9 +1,31 @@
+/* =====================================================================
+   globals.css — ໄຟລ໌ CSS ຫຼັກຂອງທັງເວັບ
+   ---------------------------------------------------------------------
+   ໂຄງສ້າງໄຟລ໌ນີ້:
+     1. @import         ດຶງ Tailwind ແລະ style ຂອງ shadcn ເຂົ້າມາ
+     2. @custom-variant ບອກວ່າ "dark:" ເຮັດວຽກເມື່ອມີ class .dark
+     3. @theme inline   ເຊື່ອມ CSS variable ໃຫ້ໃຊ້ເປັນ class Tailwind ໄດ້
+                        (ເຊັ່ນ --primary → ໃຊ້ bg-primary, text-primary)
+     4. :root           ສີຂອງ Light mode  ⭐ ແກ້ theme ຢູ່ນີ້
+     5. .dark           ສີຂອງ Dark mode   ⭐ ແກ້ theme ຢູ່ນີ້
+     6. @layer base     style ພື້ນຖານຂອງທຸກອົງປະກອບ
+
+   ກ່ຽວກັບສີ oklch(L C H):
+     L = ຄວາມແຈ້ງ (0 = ດຳ, 1 = ຂາວ)
+     C = ຄວາມສົດຂອງສີ (0 = ເທົາລ້ວນ, ຍິ່ງຫຼາຍຍິ່ງສົດ)
+     H = ໂທນສີ ເປັນອົງສາ 0-360 (ເຊັ່ນ 25 = ແດງ, 145 = ຂຽວ, 257 = ຟ້າ)
+   ===================================================================== */
+
+/* 1. ດຶງ Tailwind CSS, animation ແລະ style ຂອງ shadcn ເຂົ້າມາ */
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* 2. ໃຫ້ class ແບບ "dark:hidden" ເຮັດວຽກ ເມື່ອແທັກແມ່ (<html>) ມີ class "dark" */
 @custom-variant dark (&:is(.dark *));
 
+/* 3. ເຊື່ອມ CSS variable ກັບ Tailwind (ສ່ວນນີ້ບໍ່ຈຳເປັນຕ້ອງແກ້)
+   ເຊັ່ນ: --color-primary: var(--primary) ເຮັດໃຫ້ໃຊ້ class "bg-primary" ໄດ້ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -48,6 +70,15 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* 4. ສີຂອງ LIGHT MODE ⭐
+   ຄູ່ສີ: --xxx = ສີພື້ນ, --xxx-foreground = ສີຕົວໜັງສືທີ່ຢູ່ເທິງພື້ນນັ້ນ
+     --background  ພື້ນຫຼັງເວັບ          --card       ພື້ນກາດ
+     --primary     ສີຫຼັກ (ປຸ່ມ, ລິ້ງ)    --secondary  ສີຮອງ
+     --muted       ສີຈາງ (ຂໍ້ຄວາມຮອງ)    --accent     ສີເນັ້ນ (ຕອນ hover)
+     --destructive ສີແດງ (error)         --border     ສີເສັ້ນຂອບ
+     --input       ຂອບຊ່ອງພິມ            --ring       ຂອບຕອນກົດເລືອກ (focus)
+     --chart-1..5  ສີກຣາຟ               --sidebar-*  ສີແຖບຂ້າງ (ຍັງບໍ່ໄດ້ໃຊ້)
+     --radius      ຄວາມມົນຂອງມຸມ */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -83,6 +114,8 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* 5. ສີຂອງ DARK MODE ⭐ (ໃຊ້ເມື່ອ <html> ມີ class "dark")
+   ຊື່ຕົວແປຄືກັບ :root ທຸກຢ່າງ ພຽງແຕ່ປ່ຽນຄ່າສີໃຫ້ເປັນໂທນມືດ */
 .dark {
   --background: oklch(0.16 0.01 257);
   --foreground: oklch(0.985 0 0);
@@ -117,6 +150,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* 6. Style ພື້ນຖານ: ສີຂອບຂອງທຸກອົງປະກອບ, ສີພື້ນ/ຕົວໜັງສືຂອງ body, font */
 @layer base {
   * {
     @apply border-border outline-ring/50;
