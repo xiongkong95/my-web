@@ -1,10 +1,12 @@
 // =====================================================================
 // ໜ້າ Login (URL: /login)
 // ---------------------------------------------------------------------
-// ໜ້າທີ່: ໃຫ້ຜູ້ໃຊ້ປ້ອນ Email + Password ແລ້ວກົດ Login ເພື່ອເຂົ້າ Dashboard
+// ໜ້າທີ່: ເຂົ້າລະບົບໄດ້ 2 ວິທີເທົ່ານັ້ນ:
+//   1. ເບີໂທ + Password
+//   2. ປຸ່ມ Google
 // ໂຄງສ້າງໜ້າ (ຈໍໃຫຍ່ແບ່ງເປັນ 2 ຝັ່ງ):
 //   - ຝັ່ງຊ້າຍ:  ພາບຕົກແຕ່ງ (ລາຍເສັ້ນ blueprint + ຮູບກ້ອນລູກບາດ) — ເຊື່ອງໄວ້ໃນມືຖື
-//   - ຝັ່ງຂວາ:  ກາດ Login (ໂລໂກ້, ຟອມ, ປຸ່ມ Login, ປຸ່ມ Google/GitHub)
+//   - ຝັ່ງຂວາ:  ກາດ Login (ໂລໂກ້, ຟອມ, ປຸ່ມ Login, ປຸ່ມ Google)
 // ໝາຍເຫດ: ນີ້ແມ່ນການ "ຈຳລອງ" ເທົ່ານັ້ນ, ບໍ່ໄດ້ກວດກັບ server ຫຼື database ແທ້
 // =====================================================================
 
@@ -15,12 +17,13 @@
 import { useState } from "react"; // ເກັບຂໍ້ມູນທີ່ປ່ຽນແປງໄດ້
 import Link from "next/link"; // ລິ້ງໄປໜ້າອື່ນ
 import { useRouter } from "next/navigation"; // ສັ່ງປ່ຽນໜ້າດ້ວຍ code
-// ໄອຄອນຈາກ lucide-react: ຊອງຈົດໝາຍ, ກະແຈ, ຕາ, ຕາປິດ, ລູກສອນ
-import { ArrowRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
+// ໄອຄອນຈາກ lucide-react: ໂທລະສັບ, ກະແຈ, ຕາ, ຕາປິດ, ລູກສອນ
+import { ArrowRight, Eye, EyeOff, Lock, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { isValidLaoPhone } from "@/lib/phone"; // ຟັງຊັນກວດເບີໂທລາວ
 
 // =====================================================================
 // Component ນ້ອຍໆ ທີ່ໃຊ້ໃນໜ້ານີ້ (ແຍກອອກມາເພື່ອໃຫ້ code ຫຼັກອ່ານງ່າຍ)
@@ -62,15 +65,6 @@ function GoogleIcon() {
   );
 }
 
-// ---------- ໂລໂກ້ GitHub (SVG ສີດຽວ) ----------
-function GitHubIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="size-4">
-      <path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5Z" />
-    </svg>
-  );
-}
-
 // =====================================================================
 // Component ຫຼັກຂອງໜ້າ Login
 // =====================================================================
@@ -78,7 +72,7 @@ export default function LoginPage() {
   const router = useRouter(); // ໃຊ້ປ່ຽນໜ້າ
 
   // ---------- State ----------
-  const [email, setEmail] = useState(""); // Email ທີ່ພິມ
+  const [phone, setPhone] = useState(""); // ເບີໂທທີ່ພິມ
   const [password, setPassword] = useState(""); // Password ທີ່ພິມ
   const [showPassword, setShowPassword] = useState(false); // true = ສະແດງລະຫັດຜ່ານໃຫ້ເຫັນ
   const [error, setError] = useState(""); // ຂໍ້ຄວາມ error (ວ່າງ = ບໍ່ມີ error)
@@ -87,20 +81,26 @@ export default function LoginPage() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); // ຫ້າມບໍ່ໃຫ້ form reload ໜ້າເວັບ
 
-    // ກວດວ່າປ້ອນຄົບບໍ່ ("||" = "ຫຼື")
-    if (email === "" || password === "") {
-      setError("ກະລຸນາປ້ອນ Email ແລະ Password");
+    // ຂັ້ນ 1: ກວດວ່າປ້ອນຄົບບໍ່ ("||" = "ຫຼື")
+    if (phone === "" || password === "") {
+      setError("ກະລຸນາປ້ອນເບີໂທ ແລະ Password");
       return; // ຢຸດ ບໍ່ເຮັດຕໍ່
+    }
+
+    // ຂັ້ນ 2: ກວດຮູບແບບເບີໂທ ("!" = "ບໍ່", ຄື ຖ້າເບີໂທບໍ່ຖືກຕ້ອງ)
+    if (!isValidLaoPhone(phone)) {
+      setError("ເບີໂທບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: 020 5555 5555 ຫຼື 030 555 5555)");
+      return;
     }
 
     setError(""); // ລ້າງ error
     router.push("/dashboard"); // ໄປໜ້າ Dashboard
   }
 
-  // ---------- ເມື່ອກົດປຸ່ມ Google / GitHub ----------
-  // ຍັງບໍ່ໄດ້ເຊື່ອມຕໍ່ແທ້ ພຽງແຕ່ສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ
-  function handleSocialLogin(provider: string) {
-    alert(`Login ດ້ວຍ ${provider} ຍັງບໍ່ທັນເປີດໃຊ້`);
+  // ---------- ເມື່ອກົດປຸ່ມ Google ----------
+  // ຍັງບໍ່ໄດ້ເຊື່ອມຕໍ່ Google ແທ້ ພຽງແຕ່ສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ
+  function handleGoogleLogin() {
+    alert("Login ດ້ວຍ Google ຍັງບໍ່ທັນເປີດໃຊ້");
   }
 
   // ---------- ສ່ວນສະແດງຜົນ (JSX) ----------
@@ -157,22 +157,22 @@ export default function LoginPage() {
 
           {/* ----- ຟອມ Login ----- */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* ===== ຊ່ອງ Email ===== */}
+            {/* ===== ຊ່ອງເບີໂທ ===== */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="phone">Phone number</Label>
               {/* relative = ໃຫ້ໄອຄອນວາງຊ້ອນຢູ່ໃນຊ່ອງພິມໄດ້ */}
               <div className="relative">
-                {/* ໄອຄອນຊອງຈົດໝາຍ ວາງຢູ່ຊ້າຍໃນຊ່ອງ
+                {/* ໄອຄອນໂທລະສັບ ວາງຢູ່ຊ້າຍໃນຊ່ອງ
                     absolute left-3 = ຫ່າງຊ້າຍ, top-1/2 -translate-y-1/2 = ຈັດກາງແນວຕັ້ງ */}
-                <Mail className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Phone className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
+                  id="phone"
+                  type="tel" // tel = ມືຖືຈະເປີດແປ້ນພິມຕົວເລກ
+                  placeholder="020 5555 5555"
                   // h-11 = ສູງຂຶ້ນ, pl-10 = ເວັ້ນຊ້າຍໃຫ້ໄອຄອນ
                   className="h-11 pl-10"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
             </div>
@@ -237,27 +237,16 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-border" />
           </div>
 
-          {/* ----- ປຸ່ມ Google ແລະ GitHub (2 ຖັນ) ----- */}
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11"
-              onClick={() => handleSocialLogin("Google")}
-            >
-              <GoogleIcon />
-              Google
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11"
-              onClick={() => handleSocialLogin("GitHub")}
-            >
-              <GitHubIcon />
-              GitHub
-            </Button>
-          </div>
+          {/* ----- ປຸ່ມ Google (ກວ້າງເຕັມແຖວ: w-full) ----- */}
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 w-full"
+            onClick={handleGoogleLogin}
+          >
+            <GoogleIcon />
+            Continue with Google
+          </Button>
 
           {/* ----- ລິ້ງໄປໜ້າ Register ----- */}
           <p className="mt-8 text-center text-sm text-muted-foreground">

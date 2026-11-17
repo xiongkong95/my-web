@@ -4,8 +4,8 @@
 
 ## ✨ ສິ່ງທີ່ມີ
 
-- **Login** (`/login`): ຟອມ Email + Password
-- **Register** (`/register`): ຟອມ Name, Email, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
+- **Login** (`/login`): ເບີໂທ + Password ຫຼື Google
+- **Register** (`/register`): ຟອມ Name, Phone number, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
 - **Dashboard** (`/dashboard`): ກາດສະຖິຕິ ແລະຕາຕະລາງ Order
 - **Theme ຂອງຕົນເອງ**: ສີເທົາ-ຂາວ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
 - **Dark mode**: ກົດປຸ່ມ 🌙 ຢູ່ມຸມຂວາເທິງ

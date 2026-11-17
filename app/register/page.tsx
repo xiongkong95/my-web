@@ -1,8 +1,8 @@
 // =====================================================================
 // ໜ້າ Register (URL: /register)
 // ---------------------------------------------------------------------
-// ໜ້າທີ່: ໃຫ້ຜູ້ໃຊ້ສ້າງບັນຊີໃໝ່ ໂດຍປ້ອນ Name, Email, Password, Confirm password
-// ມີການກວດຂໍ້ມູນ (validation) 3 ຢ່າງ ກ່ອນສົ່ງ
+// ໜ້າທີ່: ໃຫ້ຜູ້ໃຊ້ສ້າງບັນຊີໃໝ່ ໂດຍປ້ອນ Name, Phone number, Password, Confirm password
+// ມີການກວດຂໍ້ມູນ (validation) 4 ຢ່າງ ກ່ອນສົ່ງ
 // ໝາຍເຫດ: ບໍ່ໄດ້ບັນທຶກຂໍ້ມູນແທ້ (ບໍ່ມີ database), ເປັນການຈຳລອງເທົ່ານັ້ນ
 // =====================================================================
 
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme-toggle"; // ປຸ່ມ dark mode
+import { isValidLaoPhone } from "@/lib/phone"; // ຟັງຊັນກວດເບີໂທລາວ (ໃຊ້ຮ່ວມກັບໜ້າ Login)
 import {
   Card,
   CardContent,
@@ -32,7 +33,7 @@ export default function RegisterPage() {
 
   // ---------- State: ເກັບຄ່າຂອງແຕ່ລະຊ່ອງ ----------
   const [name, setName] = useState(""); // ຊື່
-  const [email, setEmail] = useState(""); // ອີເມວ
+  const [phone, setPhone] = useState(""); // ເບີໂທ
   const [password, setPassword] = useState(""); // ລະຫັດຜ່ານ
   const [confirmPassword, setConfirmPassword] = useState(""); // ຢືນຢັນລະຫັດຜ່ານ
   const [error, setError] = useState(""); // ຂໍ້ຄວາມ error (ວ່າງ = ບໍ່ມີ error)
@@ -44,18 +45,24 @@ export default function RegisterPage() {
     // ກວດຂໍ້ມູນເທື່ອລະຂັ້ນ: ຖ້າຜິດຂັ້ນໃດ ໃຫ້ສະແດງ error ແລ້ວ return (ຢຸດ) ທັນທີ
 
     // ຂັ້ນ 1: ກວດວ່າປ້ອນຄົບທຸກຊ່ອງບໍ່ ("||" = "ຫຼື")
-    if (name === "" || email === "" || password === "" || confirmPassword === "") {
+    if (name === "" || phone === "" || password === "" || confirmPassword === "") {
       setError("ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບທຸກຊ່ອງ");
       return;
     }
 
-    // ຂັ້ນ 2: ກວດຄວາມຍາວ Password (.length = ຈຳນວນຕົວອັກສອນ)
+    // ຂັ້ນ 2: ກວດຮູບແບບເບີໂທ ("!" = "ບໍ່", ຄື ຖ້າເບີໂທບໍ່ຖືກຕ້ອງ)
+    if (!isValidLaoPhone(phone)) {
+      setError("ເບີໂທບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: 020 5555 5555 ຫຼື 030 555 5555)");
+      return;
+    }
+
+    // ຂັ້ນ 3: ກວດຄວາມຍາວ Password (.length = ຈຳນວນຕົວອັກສອນ)
     if (password.length < 6) {
       setError("Password ຕ້ອງມີຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ");
       return;
     }
 
-    // ຂັ້ນ 3: ກວດວ່າ Password ກັບ Confirm ກົງກັນບໍ່ ("!==" = "ບໍ່ເທົ່າກັບ")
+    // ຂັ້ນ 4: ກວດວ່າ Password ກັບ Confirm ກົງກັນບໍ່ ("!==" = "ບໍ່ເທົ່າກັບ")
     if (password !== confirmPassword) {
       setError("Password ແລະ Confirm password ບໍ່ກົງກັນ");
       return;
@@ -102,15 +109,15 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* ----- ຊ່ອງ Email ----- */}
+            {/* ----- ຊ່ອງເບີໂທ ----- */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="phone">Phone number</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="phone"
+                type="tel" // tel = ມືຖືຈະເປີດແປ້ນພິມຕົວເລກ
+                placeholder="020 5555 5555"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
 
