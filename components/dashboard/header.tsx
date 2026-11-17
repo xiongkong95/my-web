@@ -10,11 +10,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Bell, LogOut, Search, Settings } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LogoutButton } from "@/components/dashboard/logout-button";
 import { loadUser, type User } from "@/lib/user";
 
 // ລາຍການແທັບ
@@ -63,13 +63,11 @@ export function Header() {
           </Button>
           <ThemeToggle />
           {/* ປຸ່ມ Logout ສຳລັບມືຖື (lg:hidden = ເຊື່ອງໃນຈໍໃຫຍ່ ເພາະມີໃນ Sidebar ແລ້ວ) */}
-          <Link
-            href="/login"
-            aria-label="Logout"
+          <LogoutButton
             className={buttonVariants({ variant: "outline", size: "icon", className: "rounded-full lg:hidden" })}
           >
             <LogOut />
-          </Link>
+          </LogoutButton>
 
           {/* ໂປຣໄຟລ໌: ວົງມົນສີທອງມີຕົວອັກສອນທຳອິດ + ຊື່ + ເບີໂທ
               hidden sm:block = ເຊື່ອງຊື່ໃນຈໍນ້ອຍຫຼາຍ */}

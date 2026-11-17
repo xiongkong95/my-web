@@ -4,7 +4,7 @@
 // - ເທິງ: ໂລໂກ້ + ຊື່ "My Web"
 // - ກາງ: ເມນູຫຼັກ (Dashboard, Portfolio, ...)
 // - ລຸ່ມ: Settings, Support, Logout
-// ໝາຍເຫດ: ເມນູຍັງບໍ່ມີໜ້າແທ້ (href="#") ຍົກເວັ້ນ Logout
+// ໝາຍເຫດ: ເມນູຍັງບໍ່ມີໜ້າແທ້ (href="#") ຍົກເວັ້ນ Logout (ໃຊ້ LogoutButton)
 // =====================================================================
 
 import Link from "next/link";
@@ -19,6 +19,7 @@ import {
   Users,
 } from "lucide-react";
 import { CubeLogo } from "@/components/icons";
+import { LogoutButton } from "@/components/dashboard/logout-button";
 
 // ລາຍການເມນູຫຼັກ: label = ຂໍ້ຄວາມ, icon = ໄອຄອນ, active = ເປັນໜ້າປັດຈຸບັນບໍ່
 const mainMenu = [
@@ -87,11 +88,11 @@ export function Sidebar() {
             </Link>
           );
         })}
-        {/* Logout: ກັບໄປໜ້າ Login */}
-        <Link href="/login" className={itemClass}>
+        {/* Logout: ລຶບສະຖານະ Login ແລ້ວກັບໄປໜ້າ Login */}
+        <LogoutButton className={itemClass}>
           <LogOut className="size-4" />
           Logout
-        </Link>
+        </LogoutButton>
       </div>
     </aside>
   );

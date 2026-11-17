@@ -5,7 +5,8 @@
 //   1. ເບີໂທ + Password
 //   2. ປຸ່ມ Google
 // ໜ້າຕາ (ພື້ນມືດ, ກາດ, ໂລໂກ້) ມາຈາກ component AuthShell
-// ໝາຍເຫດ: ນີ້ແມ່ນການ "ຈຳລອງ" ເທົ່ານັ້ນ, ບໍ່ໄດ້ກວດກັບ server ຫຼື database ແທ້
+// ໝາຍເຫດ: ນີ້ແມ່ນການ "ຈຳລອງ" ເທົ່ານັ້ນ, ກວດກັບຂໍ້ມູນໃນ localStorage
+//          (ທີ່ບັນທຶກຕອນ Register) ບໍ່ແມ່ນ server ຫຼື database ແທ້
 // =====================================================================
 
 // "use client" = ໄຟລ໌ນີ້ເຮັດວຽກໃນ browser (ຕ້ອງໃຊ້ເພາະມີ useState ແລະ onClick)
@@ -23,6 +24,7 @@ import { Label } from "@/components/ui/label";
 import { AuthShell } from "@/components/auth-shell"; // ໂຄງຮ່າງໜ້າ (ພື້ນຫຼັງ + ກາດ)
 import { GoogleButton } from "@/components/google-button"; // ເສັ້ນແບ່ງ + ປຸ່ມ Google
 import { isValidLaoPhone } from "@/lib/phone"; // ຟັງຊັນກວດເບີໂທລາວ
+import { loadUser, setLoggedIn } from "@/lib/user"; // ອ່ານບັນຊີ + ຈື່ວ່າ Login ແລ້ວ
 
 // =====================================================================
 // Component ຫຼັກຂອງໜ້າ Login
@@ -52,7 +54,24 @@ export default function LoginPage() {
       return;
     }
 
+    // ຂັ້ນ 3: ກວດວ່າເຄີຍ Register ແລ້ວບໍ່
+    const user = loadUser();
+    if (user === null) {
+      setError("ຍັງບໍ່ມີບັນຊີ ກະລຸນາ Sign up ກ່ອນ");
+      return;
+    }
+
+    // ຂັ້ນ 4: ກວດວ່າເບີໂທ ແລະ Password ກົງກັບທີ່ Register ໄວ້ບໍ່
+    // replaceAll(" ", "") = ລຶບຍະຫວ່າງອອກກ່ອນປຽບທຽບ
+    // ເຊັ່ນ "020 5555 5555" ກັບ "02055555555" ຖືວ່າເບີດຽວກັນ
+    const samePhone = phone.replaceAll(" ", "") === user.phone.replaceAll(" ", "");
+    if (!samePhone || password !== user.password) {
+      setError("ເບີໂທ ຫຼື Password ບໍ່ຖືກຕ້ອງ");
+      return;
+    }
+
     setError(""); // ລ້າງ error
+    setLoggedIn(); // ຈື່ວ່າ Login ແລ້ວ (ໜ້າ Dashboard ຈະກວດອັນນີ້)
     router.push("/dashboard"); // ໄປໜ້າ Dashboard
   }
 

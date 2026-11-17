@@ -80,7 +80,7 @@ export default function RegisterPage() {
     // ຖ້າມາຮອດນີ້ = ຂໍ້ມູນຖືກຕ້ອງທັງໝົດ
     setError(""); // ລ້າງ error
     // ບັນທຶກຊື່ ແລະເບີໂທໄວ້ໃນ browser ເພື່ອໃຫ້ໜ້າ Dashboard ເອົາໄປສະແດງ
-    saveUser({ name: name, phone: phone });
+    saveUser({ name: name, phone: phone, password: password });
     alert("ລົງທະບຽນສຳເລັດ! ກະລຸນາ Login"); // alert = ສະແດງກ່ອງແຈ້ງເຕືອນ
     router.push("/login"); // ໄປໜ້າ Login
   }
