@@ -4,6 +4,7 @@
 // ກົດແທັບ ເກັງ / SUV / ກະບະ ແລ້ວລາຍການລົດຈະປ່ຽນຕາມ
 // ຂໍ້ຄວາມມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ), ຊື່ລຸ້ນລົດບໍ່ແປ
 // ແຕ່ລະແຖວມີ: ຮູບລົດ, ຊື່ລຸ້ນ + ປີ, ລາຄາ (ກີບ + ໂດລາ), ຂາຍໄດ້ / ເຫຼືອໃນສາງ
+// ຈຳນວນຂາຍໄດ້ ປ່ຽນຕາມຊ່ວງເວລາ (period) ແລະລຽງລົດທີ່ຂາຍໄດ້ຫຼາຍສຸດຂຶ້ນກ່ອນ
 // =====================================================================
 
 // ຕ້ອງໃຊ້ "use client" ເພາະມີ useState
@@ -12,25 +13,34 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { CarImage } from "@/components/dashboard/car-image";
-import { formatKip, formatUSD, topCars, type CarType } from "@/lib/dashboard-data";
+import { formatKip, formatUSD, topCars, type CarType, type Period } from "@/lib/dashboard-data";
 import { useLanguage } from "@/components/language-provider";
 
 // ລາຍການແທັບ: ແຕ່ລະຄ່າ = ຊື່ໃນຂໍ້ມູນ topCars ແລະຊື່ຂໍ້ຄວາມໃນ t.topCars ພ້ອມກັນ
 // ເຊັ່ນ "pickup" → topCars.pickup (ລາຍການລົດ) ແລະ t.topCars.pickup ("ກະບະ")
 const tabs: CarType[] = ["sedan", "suv", "pickup"];
 
-export function TopCarsCard() {
+// props: period = ຊ່ວງເວລາທີ່ເລືອກ (ສົ່ງມາຈາກ DashboardContent)
+export function TopCarsCard({ period }: { period: Period }) {
   // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
   const { t } = useLanguage();
   // ແທັບທີ່ເລືອກຢູ່ (ເລີ່ມຕົ້ນ = pickup)
   const [activeTab, setActiveTab] = useState<CarType>("pickup");
 
-  // ເອົາລາຍການລົດຂອງແທັບທີ່ເລືອກ
-  const cars = topCars[activeTab];
+  // ເອົາລາຍການລົດຂອງແທັບທີ່ເລືອກ ແລ້ວລຽງຕາມຈຳນວນຂາຍໃນຊ່ວງເວລານີ້ (ຫຼາຍ → ໜ້ອຍ)
+  // [...array] = ສຳເນົາ array ກ່ອນ ເພາະ sort ຈະປ່ຽນ array ເດີມ
+  // sort((a, b) => b - a) = ລຽງຈາກໃຫຍ່ໄປນ້ອຍ
+  const cars = [...topCars[activeTab]].sort((a, b) => b.sold[period] - a.sold[period]);
 
   return (
     <Card className="h-full gap-4 p-5">
-      <h3 className="font-medium">{t.topCars.title}</h3>
+      {/* ຫົວຂໍ້ + ປ້າຍຊ່ວງເວລາ */}
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="font-medium">{t.topCars.title}</h3>
+        <span className="rounded-full bg-primary/15 px-2.5 py-0.5 text-xs text-primary">
+          {t.periodRange[period]}
+        </span>
+      </div>
 
       {/* ----- ແທັບ ----- */}
       <div className="flex gap-2">
@@ -64,7 +74,7 @@ export function TopCarsCard() {
               <p className="truncate text-sm font-medium">{car.name}</p>
               <p className="text-xs text-muted-foreground">{car.year}</p>
               <p className="text-xs text-muted-foreground">
-                {t.topCars.sold} <span className="font-semibold text-foreground">{car.sold}</span> ·{" "}
+                {t.topCars.sold} <span className="font-semibold text-foreground">{car.sold[period]}</span> ·{" "}
                 {t.topCars.stock}{" "}
                 <span className="font-semibold text-foreground">{car.stock}</span>
               </p>

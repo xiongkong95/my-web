@@ -2,6 +2,7 @@
 // ໜ້າ Dashboard (URL: /dashboard) — ຮ້ານຂາຍລົດ Moora Auto Service
 // ---------------------------------------------------------------------
 // ໜ້າທີ່: ໃຫ້ເຈົ້າຂອງຮ້ານເບິ່ງພາບລວມ: ຍອດຂາຍ, ລົດໃນສາງ ແລະການສັ່ງຊື້
+// ເລືອກເບິ່ງຂໍ້ມູນຕາມຊ່ວງເວລາ: ມື້ / ອາທິດ / ເດືອນ / ປີ (ປຸ່ມຢູ່ໃນສ່ວນຫົວ)
 // ໄຟລ໌ນີ້ພຽງແຕ່ "ປະກອບ" ສ່ວນຕ່າງໆເຂົ້າກັນ, ລາຍລະອຽດຂອງແຕ່ລະສ່ວນ
 // ຢູ່ໃນໂຟນເດີ components/dashboard/ (ແຍກໄຟລ໌ເພື່ອໃຫ້ອ່ານງ່າຍ)
 //
@@ -20,11 +21,7 @@
 
 import { AuthGuard } from "@/components/dashboard/auth-guard";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
-import { StatCards } from "@/components/dashboard/stat-cards";
-import { SalesChart } from "@/components/dashboard/sales-chart";
-import { TopCarsCard } from "@/components/dashboard/top-cars-card";
-import { RecentOrdersCard } from "@/components/dashboard/recent-orders-card";
+import { DashboardContent } from "@/components/dashboard/dashboard-content";
 
 export default function DashboardPage() {
   return (
@@ -41,25 +38,9 @@ export default function DashboardPage() {
         <Sidebar />
 
         {/* ===== ເນື້ອຫາຫຼັກ =====
-            flex-1 = ກວ້າງເຕັມທີ່ເຫຼືອ, min-w-0 = ກັນເນື້ອຫາລົ້ນອອກ */}
-        <div className="relative flex min-w-0 flex-1 flex-col gap-4">
-          <Header />
-
-          {/* ກາດສະຖິຕິ 4 ອັນ */}
-          <StatCards />
-
-          {/* ແຖວກຣາຟ + ລົດຂາຍດີ: ຈໍໃຫຍ່ແບ່ງ 3 ສ່ວນ (ກຣາຟ 2 ສ່ວນ, ລົດ 1 ສ່ວນ) */}
-          <div className="grid gap-4 xl:grid-cols-3">
-            {/* xl:col-span-2 = ກວ້າງ 2 ຖັນ */}
-            <div className="xl:col-span-2">
-              <SalesChart />
-            </div>
-            <TopCarsCard />
-          </div>
-
-          {/* ລາຍການສັ່ງຊື້ ກວ້າງເຕັມແຖວ */}
-          <RecentOrdersCard />
-        </div>
+            Header, ກາດສະຖິຕິ, ກຣາຟ, ລົດຂາຍດີ, ການສັ່ງຊື້
+            ຢູ່ໃນ DashboardContent ເພາະທຸກອັນຕ້ອງໃຊ້ "ຊ່ວງເວລາທີ່ເລືອກ" ຮ່ວມກັນ */}
+        <DashboardContent />
       </main>
     </AuthGuard>
   );

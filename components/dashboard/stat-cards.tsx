@@ -1,7 +1,9 @@
 // =====================================================================
-// ກາດສະຖິຕິ 4 ອັນ — ລົດໃນສາງ, ຂາຍໄດ້ເດືອນນີ້, ລາຍຮັບ, ລູກຄ້າໃໝ່
+// ກາດສະຖິຕິ 4 ອັນ — ລົດໃນສາງ, ຂາຍໄດ້, ລາຍຮັບ, ລູກຄ້າໃໝ່
 // ---------------------------------------------------------------------
-// ແຕ່ລະກາດມີ: ໄອຄອນ + ຫົວຂໍ້ + ຕົວເລກ + % ປ່ຽນແປງທຽບກັບເດືອນກ່ອນ
+// ແຕ່ລະກາດມີ: ໄອຄອນ + ຫົວຂໍ້ + ຕົວເລກ + % ປ່ຽນແປງ
+// - ຂາຍໄດ້, ລາຍຮັບ, ລູກຄ້າໃໝ່ = ປ່ຽນຕາມຊ່ວງເວລາທີ່ເລືອກ (period)
+// - ລົດໃນສາງ = ຈຳນວນຕອນນີ້ ບໍ່ປ່ຽນ
 // ຂໍ້ຄວາມມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ)
 // =====================================================================
 
@@ -10,47 +12,65 @@
 
 import { Banknote, Car, Handshake, UserPlus } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { formatKipShort, formatUSD, stats } from "@/lib/dashboard-data";
+import {
+  carsInStock,
+  formatKipShort,
+  formatUSD,
+  periodStats,
+  totalSales,
+  type Period,
+} from "@/lib/dashboard-data";
 import { useLanguage } from "@/components/language-provider";
 
-export function StatCards() {
+// props: period = ຊ່ວງເວລາທີ່ເລືອກ (ສົ່ງມາຈາກ DashboardContent)
+export function StatCards({ period }: { period: Period }) {
   // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
   const { t } = useLanguage();
 
+  // ຂໍ້ມູນສະຖິຕິຂອງຊ່ວງເວລາທີ່ເລືອກ
+  const s = periodStats[period];
+  // ລາຍຮັບ = ຍອດລວມຂອງກຣາຟ (ຕົວເລກກົງກັບກຣາຟສະເໝີ)
+  const revenue = totalSales(period);
+  // ຂໍ້ຄວາມທ້າຍ % ເຊັ່ນ "ທຽບກັບມື້ວານ"
+  const vs = t.vsPrevious[period];
+
   // ລາຍການກາດ: ເກັບເປັນ array ແລ້ວໃຊ້ .map() ສ້າງກາດ ຈະໄດ້ບໍ່ຕ້ອງຂຽນຊ້ຳ 4 ເທື່ອ
-  // (ສ້າງໃນ component ເພາະຂໍ້ຄວາມປ່ຽນຕາມພາສາ)
   //   label = ຫົວຂໍ້, icon = ໄອຄອນ
   //   value = ຕົວເລກໃຫຍ່, sub = ຂໍ້ຄວາມນ້ອຍຂ້າງລຸ່ມ (ວ່າງໄດ້)
-  //   change = % ປ່ຽນແປງ
+  //   change = % ປ່ຽນແປງ, vs = ທຽບກັບຫຍັງ
   const cards = [
     {
       label: t.stats.carsInStock,
       icon: Car,
-      value: `${stats.carsInStock.value} ${t.stats.carsUnit}`,
+      value: `${carsInStock.value} ${t.stats.carsUnit}`,
       sub: "",
-      change: stats.carsInStock.change,
+      change: carsInStock.change,
+      vs: t.stats.vsLastMonth, // ລົດໃນສາງທຽບກັບເດືອນກ່ອນສະເໝີ
     },
     {
-      label: t.stats.soldThisMonth,
+      label: t.stats.sold,
       icon: Handshake,
-      value: `${stats.soldThisMonth.value} ${t.stats.carsUnit}`,
+      value: `${s.sold} ${t.stats.carsUnit}`,
       sub: "",
-      change: stats.soldThisMonth.change,
+      change: s.soldChange,
+      vs: vs,
     },
     {
       // ລາຍຮັບ: ສະແດງທັງ ກີບ (ໃຫຍ່) ແລະ ໂດລາ (ນ້ອຍ)
       label: t.stats.revenue,
       icon: Banknote,
-      value: formatKipShort(stats.revenue.value),
-      sub: formatUSD(stats.revenue.value),
-      change: stats.revenue.change,
+      value: formatKipShort(revenue),
+      sub: formatUSD(revenue),
+      change: s.revenueChange,
+      vs: vs,
     },
     {
       label: t.stats.newCustomers,
       icon: UserPlus,
-      value: `${stats.newCustomers.value} ${t.stats.peopleUnit}`,
+      value: `${s.newCustomers} ${t.stats.peopleUnit}`,
       sub: "",
-      change: stats.newCustomers.change,
+      change: s.customersChange,
+      vs: vs,
     },
   ];
 
@@ -80,13 +100,13 @@ export function StatCards() {
               {card.sub && <p className="text-sm text-muted-foreground">≈ {card.sub}</p>}
             </div>
 
-            {/* % ປ່ຽນແປງທຽບກັບເດືອນກ່ອນ */}
+            {/* % ປ່ຽນແປງ ທຽບກັບຊ່ວງກ່ອນໜ້າ */}
             <p className="text-xs text-muted-foreground">
               <span className={isUp ? "font-medium text-emerald-500" : "font-medium text-red-500"}>
                 {isUp ? "+" : ""}
                 {card.change}%
               </span>{" "}
-              {t.stats.vsLastMonth}
+              {card.vs}
             </p>
           </Card>
         );

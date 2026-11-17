@@ -2,7 +2,8 @@
 // Header — ສ່ວນຫົວຂອງ Dashboard
 // ---------------------------------------------------------------------
 // - ແຖວທີ 1: "ສະບາຍດີ, <ຊື່>" + ປຸ່ມ 🔔 ⚙️ ພາສາ dark mode + ໂປຣໄຟລ໌
-// - ແຖວທີ 2: ແທັບ ພາບລວມ / ການຂາຍ / ສາງລົດ + ຊ່ອງຄົ້ນຫາ
+// - ແຖວທີ 2: ປຸ່ມເລືອກຊ່ວງເວລາ ມື້ / ອາທິດ / ເດືອນ / ປີ + ຊ່ອງຄົ້ນຫາ
+//   (ຊ່ວງເວລາເກັບໄວ້ໃນ DashboardContent, Header ພຽງແຕ່ສະແດງ ແລະແຈ້ງເມື່ອຖືກກົດ)
 // ຂໍ້ຄວາມທັງໝົດມາຈາກ lib/translations.ts (ປ່ຽນຕາມພາສາ)
 // ຊື່ ແລະ email ດຶງມາຈາກ localStorage (ບັນທຶກໄວ້ຕອນ Register)
 // =====================================================================
@@ -19,18 +20,21 @@ import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/components/language-provider";
 import { LogoutButton } from "@/components/dashboard/logout-button";
 import { loadUser, type User } from "@/lib/user";
+import { periods, type Period } from "@/lib/dashboard-data";
 
-// ລາຍການແທັບ: ແຕ່ລະຄ່າ = ຊື່ຂໍ້ຄວາມໃນ t.dashboard.tabs
-const tabs = ["overview", "sales", "inventory"] as const;
+// props ທີ່ Header ຮັບ:
+//   period         = ຊ່ວງເວລາທີ່ເລືອກຢູ່ (ເພື່ອໃຫ້ປຸ່ມນັ້ນເປັນສີທອງ)
+//   onPeriodChange = ຟັງຊັນທີ່ເອີ້ນເມື່ອກົດປຸ່ມ (ສົ່ງຊ່ວງເວລາໃໝ່ກັບໄປໃຫ້ DashboardContent)
+type HeaderProps = {
+  period: Period;
+  onPeriodChange: (period: Period) => void;
+};
 
-export function Header() {
+export function Header({ period, onPeriodChange }: HeaderProps) {
   // t = ຂໍ້ຄວາມຕາມພາສາທີ່ເລືອກ
   const { t } = useLanguage();
   // ຂໍ້ມູນຜູ້ໃຊ້: ເລີ່ມຕົ້ນເປັນ null (ຍັງບໍ່ໄດ້ອ່ານ)
   const [user, setUser] = useState<User | null>(null);
-  // ແທັບທີ່ເລືອກຢູ່
-  // (typeof tabs)[number] = ຄ່າໃດໜຶ່ງໃນ tabs ("overview" | "sales" | "inventory")
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("overview");
 
   // ອ່ານຂໍ້ມູນຜູ້ໃຊ້ຈາກ localStorage ຫຼັງຈາກໜ້າສະແດງແລ້ວ
   // (ຕ້ອງເຮັດໃນ useEffect ເພາະ localStorage ມີສະເພາະໃນ browser, ບໍ່ມີຢູ່ server)
@@ -92,21 +96,24 @@ export function Header() {
 
       {/* ===== ແຖວທີ 2: ແທັບ + ຊ່ອງຄົ້ນຫາ ===== */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        {/* ແທັບ: ກົດແລ້ວປ່ຽນ activeTab (ຕອນນີ້ປ່ຽນແຕ່ສີ ຍັງບໍ່ປ່ຽນເນື້ອຫາ) */}
-        <div className="flex gap-1 rounded-full border bg-card p-1">
-          {tabs.map((tab) => (
+        {/* ປຸ່ມເລືອກຊ່ວງເວລາ: ກົດແລ້ວເອີ້ນ onPeriodChange → ທັງໜ້າປ່ຽນຕາມ
+            role="group" + aria-label = ບອກໂປຣແກຣມອ່ານໜ້າຈໍວ່ານີ້ແມ່ນກຸ່ມປຸ່ມເລືອກຊ່ວງເວລາ */}
+        <div role="group" aria-label={t.dashboard.periodAria} className="flex gap-1 rounded-full border bg-card p-1">
+          {periods.map((p) => (
             <button
-              key={tab}
+              key={p}
               type="button"
-              onClick={() => setActiveTab(tab)}
-              // ແທັບທີ່ເລືອກ: ພື້ນສີທອງອ່ອນ, ແທັບອື່ນ: ສີຈາງ
+              onClick={() => onPeriodChange(p)}
+              // aria-pressed = ບອກວ່າປຸ່ມນີ້ຖືກເລືອກຢູ່ບໍ່
+              aria-pressed={period === p}
+              // ປຸ່ມທີ່ເລືອກ: ພື້ນສີທອງ, ປຸ່ມອື່ນ: ສີຈາງ
               className={
-                activeTab === tab
-                  ? "rounded-full bg-primary/15 px-4 py-1.5 text-sm font-medium text-primary"
+                period === p
+                  ? "rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground"
                   : "rounded-full px-4 py-1.5 text-sm text-muted-foreground hover:text-foreground"
               }
             >
-              {t.dashboard.tabs[tab]}
+              {t.periods[p]}
             </button>
           ))}
         </div>

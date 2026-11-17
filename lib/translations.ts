@@ -77,7 +77,7 @@ const lo = {
     welcome: "ສະບາຍດີ,",
     guest: "ແຂກ",
     subtitle: "ນີ້ແມ່ນສະຖານະຂອງໂຊຣູມທ່ານໃນມື້ນີ້",
-    tabs: { overview: "ພາບລວມ", sales: "ການຂາຍ", inventory: "ສາງລົດ" },
+    periodAria: "ເລືອກຊ່ວງເວລາ",
     search: "ຄົ້ນຫາລົດ, ລູກຄ້າ...",
     notifications: "ການແຈ້ງເຕືອນ",
     settings: "ຕັ້ງຄ່າ",
@@ -99,7 +99,7 @@ const lo = {
   // ກາດສະຖິຕິ
   stats: {
     carsInStock: "ລົດໃນສາງ",
-    soldThisMonth: "ຂາຍໄດ້ເດືອນນີ້",
+    sold: "ຂາຍໄດ້",
     revenue: "ລາຍຮັບ",
     newCustomers: "ລູກຄ້າໃໝ່",
     carsUnit: "ຄັນ",
@@ -125,7 +125,8 @@ const lo = {
 
   // ກາດລາຍການສັ່ງຊື້
   orders: {
-    title: "ການສັ່ງຊື້ລ່າສຸດ",
+    title: "ການສັ່ງຊື້",
+    empty: "ບໍ່ມີການສັ່ງຊື້ໃນຊ່ວງນີ້",
     seeAll: "ເບິ່ງທັງໝົດ",
     order: "ເລກທີ",
     customer: "ລູກຄ້າ",
@@ -135,6 +136,20 @@ const lo = {
     status: "ສະຖານະ",
     paid: "ຈ່າຍແລ້ວ",
     pending: "ລໍຖ້າຈ່າຍ",
+  },
+
+  // ປຸ່ມເລືອກຊ່ວງເວລາ (ໃນສ່ວນຫົວຂອງ Dashboard)
+  periods: { day: "ມື້", week: "ອາທິດ", month: "ເດືອນ", year: "ປີ" },
+
+  // ຊ່ວງເວລາແບບເຕັມ (ສະແດງຂ້າງຫົວຂໍ້ກາດ)
+  periodRange: { day: "ມື້ນີ້", week: "7 ວັນລ່າສຸດ", month: "4 ອາທິດລ່າສຸດ", year: "12 ເດືອນລ່າສຸດ" },
+
+  // ຂໍ້ຄວາມທ້າຍ % ປ່ຽນແປງ
+  vsPrevious: {
+    day: "ທຽບກັບມື້ວານ",
+    week: "ທຽບກັບ 7 ວັນກ່ອນ",
+    month: "ທຽບກັບ 4 ອາທິດກ່ອນ",
+    year: "ທຽບກັບປີກ່ອນ",
   },
 
   // ຊື່ເດືອນ (ໃຊ້ສະແດງວັນທີ) ລຽງຈາກ ມັງກອນ (1) ຫາ ທັນວາ (12)
@@ -210,7 +225,7 @@ const en: Translation = {
     welcome: "Welcome,",
     guest: "Guest",
     subtitle: "Here's what's happening at your showroom today",
-    tabs: { overview: "Overview", sales: "Sales", inventory: "Inventory" },
+    periodAria: "Select period",
     search: "Search cars, customers...",
     notifications: "Notifications",
     settings: "Settings",
@@ -228,7 +243,7 @@ const en: Translation = {
   },
   stats: {
     carsInStock: "Cars in stock",
-    soldThisMonth: "Sold this month",
+    sold: "Cars sold",
     revenue: "Revenue",
     newCustomers: "New customers",
     carsUnit: "cars",
@@ -248,7 +263,8 @@ const en: Translation = {
     stock: "Stock",
   },
   orders: {
-    title: "Recent Orders",
+    title: "Orders",
+    empty: "No orders in this period",
     seeAll: "See all",
     order: "Order",
     customer: "Customer",
@@ -258,6 +274,14 @@ const en: Translation = {
     status: "Status",
     paid: "Paid",
     pending: "Pending",
+  },
+  periods: { day: "Day", week: "Week", month: "Month", year: "Year" },
+  periodRange: { day: "Today", week: "Last 7 days", month: "Last 4 weeks", year: "Last 12 months" },
+  vsPrevious: {
+    day: "vs yesterday",
+    week: "vs previous 7 days",
+    month: "vs previous 4 weeks",
+    year: "vs previous year",
   },
   months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   // ພາສາອັງກິດ: ຂໍ້ມູນເປັນພາສາອັງກິດຢູ່ແລ້ວ ບໍ່ຕ້ອງແປ (object ວ່າງ)
