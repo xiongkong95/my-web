@@ -4,8 +4,8 @@
 
 ## ✨ ສິ່ງທີ່ມີ
 
-- **Login** (`/login`): ເບີໂທ + Password (ກວດກັບບັນຊີທີ່ Register ໄວ້) ຫຼື Google
-- **Register** (`/register`): ຟອມ Name, Phone number, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
+- **Login** (`/login`): Email + Password (ກວດກັບບັນຊີທີ່ Register ໄວ້) ຫຼື Google
+- **Register** (`/register`): ຟອມ Name, Email, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
 - **Dashboard** (`/dashboard`): ພາບລວມການລົງທຶນ: ແຖບເມນູ, Watchlist, Portfolio ແລະກຣາຟ (shadcn Chart). ຕ້ອງ Login ກ່ອນຈຶ່ງເຂົ້າໄດ້
 - **Theme ຂອງຕົນເອງ**: ສີທອງ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
 - **Dark mode**: ກົດປຸ່ມ 🌙 ຢູ່ມຸມຂວາເທິງ
@@ -46,7 +46,7 @@ components/
 ├── icons.tsx           → ໂລໂກ້ ແລະໄອຄອນ SVG
 └── theme-toggle.tsx    → ປຸ່ມສະຫຼັບ dark mode
 lib/
-├── phone.ts            → ຟັງຊັນກວດເບີໂທລາວ
+├── email.ts            → ຟັງຊັນກວດ email
 ├── user.ts             → ບັນທຶກ/ອ່ານບັນຊີ ແລະສະຖານະ Login ໃນ localStorage
 └── dashboard-data.ts   → ຂໍ້ມູນສົມມຸດຂອງ Dashboard
 ```

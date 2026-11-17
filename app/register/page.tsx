@@ -1,11 +1,11 @@
 // =====================================================================
 // ໜ້າ Register (URL: /register)
 // ---------------------------------------------------------------------
-// ໜ້າທີ່: ໃຫ້ຜູ້ໃຊ້ສ້າງບັນຊີໃໝ່ ໂດຍປ້ອນ Name, Phone number, Password, Confirm password
+// ໜ້າທີ່: ໃຫ້ຜູ້ໃຊ້ສ້າງບັນຊີໃໝ່ ໂດຍປ້ອນ Name, Email, Password, Confirm password
 //         ຫຼື ສະໝັກດ້ວຍປຸ່ມ Google
 // ມີການກວດຂໍ້ມູນ (validation) 4 ຢ່າງ ກ່ອນສົ່ງ
 // ໜ້າຕາ (ພື້ນມືດ, ກາດ, ໂລໂກ້) ມາຈາກ component AuthShell ຄືກັບໜ້າ Login
-// ໝາຍເຫດ: ບໍ່ໄດ້ບັນທຶກຂໍ້ມູນແທ້ (ບໍ່ມີ database), ເປັນການຈຳລອງເທົ່ານັ້ນ
+// ໝາຍເຫດ: ບັນທຶກໄວ້ໃນ localStorage ຂອງ browser ເທົ່ານັ້ນ (ບໍ່ມີ database), ເປັນການຈຳລອງ
 // =====================================================================
 
 // "use client" = ໄຟລ໌ນີ້ເຮັດວຽກໃນ browser (ຕ້ອງໃຊ້ເພາະມີ useState ແລະ onSubmit)
@@ -15,14 +15,14 @@
 import { useState } from "react"; // ເກັບຂໍ້ມູນທີ່ປ່ຽນແປງໄດ້
 import Link from "next/link"; // ລິ້ງໄປໜ້າອື່ນ
 import { useRouter } from "next/navigation"; // ສັ່ງປ່ຽນໜ້າດ້ວຍ code
-// ໄອຄອນຈາກ lucide-react: ຄົນ, ໂທລະສັບ, ກະແຈ, ຕາ, ຕາປິດ, ລູກສອນ
-import { ArrowRight, Eye, EyeOff, Lock, Phone, User } from "lucide-react";
+// ໄອຄອນຈາກ lucide-react: ຄົນ, ຊອງຈົດໝາຍ, ກະແຈ, ຕາ, ຕາປິດ, ລູກສອນ
+import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthShell } from "@/components/auth-shell"; // ໂຄງຮ່າງໜ້າ (ພື້ນຫຼັງ + ກາດ)
 import { GoogleButton } from "@/components/google-button"; // ເສັ້ນແບ່ງ + ປຸ່ມ Google
-import { isValidLaoPhone } from "@/lib/phone"; // ຟັງຊັນກວດເບີໂທລາວ (ໃຊ້ຮ່ວມກັບໜ້າ Login)
+import { isValidEmail, normalizeEmail } from "@/lib/email"; // ຟັງຊັນກວດ email (ໃຊ້ຮ່ວມກັບໜ້າ Login)
 import { saveUser } from "@/lib/user"; // ບັນທຶກຂໍ້ມູນຜູ້ໃຊ້ໄວ້ໃນ browser
 
 // class ທີ່ໃຊ້ຊ້ຳຫຼາຍເທື່ອ ເກັບໄວ້ໃນຕົວແປ ເພື່ອບໍ່ຕ້ອງພິມຊ້ຳ
@@ -40,7 +40,7 @@ export default function RegisterPage() {
 
   // ---------- State: ເກັບຄ່າຂອງແຕ່ລະຊ່ອງ ----------
   const [name, setName] = useState(""); // ຊື່
-  const [phone, setPhone] = useState(""); // ເບີໂທ
+  const [email, setEmail] = useState(""); // email
   const [password, setPassword] = useState(""); // ລະຫັດຜ່ານ
   const [confirmPassword, setConfirmPassword] = useState(""); // ຢືນຢັນລະຫັດຜ່ານ
   // true = ສະແດງລະຫັດຜ່ານໃຫ້ເຫັນ (ໃຊ້ຮ່ວມກັນທັງ 2 ຊ່ອງ Password)
@@ -54,14 +54,14 @@ export default function RegisterPage() {
     // ກວດຂໍ້ມູນເທື່ອລະຂັ້ນ: ຖ້າຜິດຂັ້ນໃດ ໃຫ້ສະແດງ error ແລ້ວ return (ຢຸດ) ທັນທີ
 
     // ຂັ້ນ 1: ກວດວ່າປ້ອນຄົບທຸກຊ່ອງບໍ່ ("||" = "ຫຼື")
-    if (name === "" || phone === "" || password === "" || confirmPassword === "") {
+    if (name === "" || email === "" || password === "" || confirmPassword === "") {
       setError("ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບທຸກຊ່ອງ");
       return;
     }
 
-    // ຂັ້ນ 2: ກວດຮູບແບບເບີໂທ ("!" = "ບໍ່", ຄື ຖ້າເບີໂທບໍ່ຖືກຕ້ອງ)
-    if (!isValidLaoPhone(phone)) {
-      setError("ເບີໂທບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: 020 5555 5555 ຫຼື 030 555 5555)");
+    // ຂັ້ນ 2: ກວດຮູບແບບ email ("!" = "ບໍ່", ຄື ຖ້າ email ບໍ່ຖືກຕ້ອງ)
+    if (!isValidEmail(email)) {
+      setError("Email ບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: noy@gmail.com)");
       return;
     }
 
@@ -79,8 +79,9 @@ export default function RegisterPage() {
 
     // ຖ້າມາຮອດນີ້ = ຂໍ້ມູນຖືກຕ້ອງທັງໝົດ
     setError(""); // ລ້າງ error
-    // ບັນທຶກຊື່ ແລະເບີໂທໄວ້ໃນ browser ເພື່ອໃຫ້ໜ້າ Dashboard ເອົາໄປສະແດງ
-    saveUser({ name: name, phone: phone, password: password });
+    // ບັນທຶກບັນຊີໄວ້ໃນ browser: ໜ້າ Login ໃຊ້ກວດ, ໜ້າ Dashboard ເອົາຊື່ໄປສະແດງ
+    // normalizeEmail = ລຶບຍະຫວ່າງ + ປ່ຽນເປັນຕົວນ້ອຍ ກ່ອນບັນທຶກ
+    saveUser({ name: name, email: normalizeEmail(email), password: password });
     alert("ລົງທະບຽນສຳເລັດ! ກະລຸນາ Login"); // alert = ສະແດງກ່ອງແຈ້ງເຕືອນ
     router.push("/login"); // ໄປໜ້າ Login
   }
@@ -89,8 +90,10 @@ export default function RegisterPage() {
   return (
     // AuthShell ສ້າງພື້ນຫຼັງ, ກາດ, ໂລໂກ້ ແລະຫົວຂໍ້ໃຫ້ (ຄືກັບໜ້າ Login)
     <AuthShell title="Create an account">
-      {/* form: ກົດປຸ່ມ submit ແລ້ວຈະເອີ້ນ handleSubmit */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {/* form: ກົດປຸ່ມ submit ແລ້ວຈະເອີ້ນ handleSubmit
+          noValidate = ປິດການກວດອັດຕະໂນມັດຂອງ browser
+          ເພື່ອໃຫ້ສະແດງຂໍ້ຄວາມ error ພາສາລາວຂອງເຮົາເອງແທນ */}
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
         {/* ທຸກຊ່ອງມີຮູບແບບດຽວກັນ:
             - Label = ປ້າຍຊື່ (htmlFor ຕ້ອງກົງກັບ id ຂອງ Input)
             - div relative = ໃຫ້ໄອຄອນວາງຊ້ອນຢູ່ໃນຊ່ອງພິມໄດ້
@@ -112,19 +115,18 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* ----- ຊ່ອງເບີໂທ ----- */}
+        {/* ----- ຊ່ອງ Email ----- */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="phone">Phone number</Label>
+          <Label htmlFor="email">Email</Label>
           <div className="relative">
-            <Phone className={iconClass} />
+            <Mail className={iconClass} />
             <Input
-              id="phone"
-              type="tel" // tel = ມືຖືຈະເປີດແປ້ນພິມຕົວເລກ
-              placeholder="020 5555 5555"
-              maxLength={13} // ພິມໄດ້ສູງສຸດ 13 ຕົວ (11 ຕົວເລກ + 2 ຍະຫວ່າງ)
+              id="email"
+              type="email" // email = ມືຖືຈະເປີດແປ້ນພິມທີ່ມີປຸ່ມ @
+              placeholder="you@example.com"
               className="h-11 pl-10"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
         </div>

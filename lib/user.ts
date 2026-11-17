@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------
 // localStorage = ບ່ອນເກັບຂໍ້ມູນນ້ອຍໆໃນ browser (ຂໍ້ມູນບໍ່ຫາຍເມື່ອ refresh)
 // ໄຟລ໌ນີ້ເກັບ 2 ຢ່າງ:
-//   1. "user"     = ຂໍ້ມູນບັນຊີ (ຊື່, ເບີໂທ, password) ບັນທຶກຕອນ Register
+//   1. "user"     = ຂໍ້ມູນບັນຊີ (ຊື່, email, password) ບັນທຶກຕອນ Register
 //   2. "loggedIn" = ສະຖານະວ່າ Login ຢູ່ບໍ່ ("true" = Login ຢູ່)
 // ⚠️ ໝາຍເຫດ: ນີ້ແມ່ນວິທີງ່າຍສຳລັບການຮຽນເທົ່ານັ້ນ!
 //    ເວັບແທ້ຕ້ອງເກັບໃນ database ທີ່ server ແລະຫ້າມເກັບ password ແບບນີ້
@@ -13,7 +13,7 @@
 // ຂໍ້ມູນຜູ້ໃຊ້ທີ່ເຮົາເກັບ
 export type User = {
   name: string;
-  phone: string;
+  email: string;
   password: string;
 };
 

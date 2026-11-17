@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------
 // - ແຖວທີ 1: "Welcome, <ຊື່>" + ປຸ່ມ 🔔 ⚙️ dark mode + ໂປຣໄຟລ໌
 // - ແຖວທີ 2: ແທັບ Market / Wallet / Tools + ຊ່ອງຄົ້ນຫາ
-// ຊື່ ແລະເບີໂທ ດຶງມາຈາກ localStorage (ບັນທຶກໄວ້ຕອນ Register)
+// ຊື່ ແລະ email ດຶງມາຈາກ localStorage (ບັນທຶກໄວ້ຕອນ Register)
 // =====================================================================
 
 // ຕ້ອງໃຊ້ "use client" ເພາະມີ useState, useEffect ແລະ localStorage
@@ -37,7 +37,7 @@ export function Header() {
   // "??" = ຖ້າຄ່າທາງຊ້າຍເປັນ null/undefined ໃຫ້ໃຊ້ຄ່າທາງຂວາແທນ
   // "?." = ຖ້າ user ເປັນ null ຈະບໍ່ error ແຕ່ໃຫ້ຄ່າ undefined
   const name = user?.name ?? "Guest";
-  const phone = user?.phone ?? "";
+  const email = user?.email ?? "";
   // ຕົວອັກສອນທຳອິດຂອງຊື່ ໃຊ້ເປັນຮູບໂປຣໄຟລ໌ ເຊັ່ນ "Somchai" → "S"
   const initial = name.charAt(0).toUpperCase();
 
@@ -69,7 +69,7 @@ export function Header() {
             <LogOut />
           </LogoutButton>
 
-          {/* ໂປຣໄຟລ໌: ວົງມົນສີທອງມີຕົວອັກສອນທຳອິດ + ຊື່ + ເບີໂທ
+          {/* ໂປຣໄຟລ໌: ວົງມົນສີທອງມີຕົວອັກສອນທຳອິດ + ຊື່ + email
               hidden sm:block = ເຊື່ອງຊື່ໃນຈໍນ້ອຍຫຼາຍ */}
           <div className="ml-2 flex items-center gap-2">
             <div className="flex size-10 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">
@@ -77,7 +77,7 @@ export function Header() {
             </div>
             <div className="hidden text-sm sm:block">
               <p className="font-medium">{name}</p>
-              <p className="text-xs text-muted-foreground">{phone}</p>
+              <p className="text-xs text-muted-foreground">{email}</p>
             </div>
           </div>
         </div>

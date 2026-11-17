@@ -2,7 +2,7 @@
 // ໜ້າ Login (URL: /login)
 // ---------------------------------------------------------------------
 // ໜ້າທີ່: ເຂົ້າລະບົບໄດ້ 2 ວິທີເທົ່ານັ້ນ:
-//   1. ເບີໂທ + Password
+//   1. Email + Password
 //   2. ປຸ່ມ Google
 // ໜ້າຕາ (ພື້ນມືດ, ກາດ, ໂລໂກ້) ມາຈາກ component AuthShell
 // ໝາຍເຫດ: ນີ້ແມ່ນການ "ຈຳລອງ" ເທົ່ານັ້ນ, ກວດກັບຂໍ້ມູນໃນ localStorage
@@ -16,14 +16,14 @@
 import { useState } from "react"; // ເກັບຂໍ້ມູນທີ່ປ່ຽນແປງໄດ້
 import Link from "next/link"; // ລິ້ງໄປໜ້າອື່ນ
 import { useRouter } from "next/navigation"; // ສັ່ງປ່ຽນໜ້າດ້ວຍ code
-// ໄອຄອນຈາກ lucide-react: ໂທລະສັບ, ກະແຈ, ຕາ, ຕາປິດ, ລູກສອນ
-import { ArrowRight, Eye, EyeOff, Lock, Phone } from "lucide-react";
+// ໄອຄອນຈາກ lucide-react: ຊອງຈົດໝາຍ, ກະແຈ, ຕາ, ຕາປິດ, ລູກສອນ
+import { ArrowRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthShell } from "@/components/auth-shell"; // ໂຄງຮ່າງໜ້າ (ພື້ນຫຼັງ + ກາດ)
 import { GoogleButton } from "@/components/google-button"; // ເສັ້ນແບ່ງ + ປຸ່ມ Google
-import { isValidLaoPhone } from "@/lib/phone"; // ຟັງຊັນກວດເບີໂທລາວ
+import { isValidEmail, normalizeEmail } from "@/lib/email"; // ຟັງຊັນກວດ email
 import { loadUser, setLoggedIn } from "@/lib/user"; // ອ່ານບັນຊີ + ຈື່ວ່າ Login ແລ້ວ
 
 // =====================================================================
@@ -33,7 +33,7 @@ export default function LoginPage() {
   const router = useRouter(); // ໃຊ້ປ່ຽນໜ້າ
 
   // ---------- State ----------
-  const [phone, setPhone] = useState(""); // ເບີໂທທີ່ພິມ
+  const [email, setEmail] = useState(""); // email ທີ່ພິມ
   const [password, setPassword] = useState(""); // Password ທີ່ພິມ
   const [showPassword, setShowPassword] = useState(false); // true = ສະແດງລະຫັດຜ່ານໃຫ້ເຫັນ
   const [error, setError] = useState(""); // ຂໍ້ຄວາມ error (ວ່າງ = ບໍ່ມີ error)
@@ -43,14 +43,14 @@ export default function LoginPage() {
     e.preventDefault(); // ຫ້າມບໍ່ໃຫ້ form reload ໜ້າເວັບ
 
     // ຂັ້ນ 1: ກວດວ່າປ້ອນຄົບບໍ່ ("||" = "ຫຼື")
-    if (phone === "" || password === "") {
-      setError("ກະລຸນາປ້ອນເບີໂທ ແລະ Password");
+    if (email === "" || password === "") {
+      setError("ກະລຸນາປ້ອນ Email ແລະ Password");
       return; // ຢຸດ ບໍ່ເຮັດຕໍ່
     }
 
-    // ຂັ້ນ 2: ກວດຮູບແບບເບີໂທ ("!" = "ບໍ່", ຄື ຖ້າເບີໂທບໍ່ຖືກຕ້ອງ)
-    if (!isValidLaoPhone(phone)) {
-      setError("ເບີໂທບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: 020 5555 5555 ຫຼື 030 555 5555)");
+    // ຂັ້ນ 2: ກວດຮູບແບບ email ("!" = "ບໍ່", ຄື ຖ້າ email ບໍ່ຖືກຕ້ອງ)
+    if (!isValidEmail(email)) {
+      setError("Email ບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: noy@gmail.com)");
       return;
     }
 
@@ -61,12 +61,12 @@ export default function LoginPage() {
       return;
     }
 
-    // ຂັ້ນ 4: ກວດວ່າເບີໂທ ແລະ Password ກົງກັບທີ່ Register ໄວ້ບໍ່
-    // replaceAll(" ", "") = ລຶບຍະຫວ່າງອອກກ່ອນປຽບທຽບ
-    // ເຊັ່ນ "020 5555 5555" ກັບ "02055555555" ຖືວ່າເບີດຽວກັນ
-    const samePhone = phone.replaceAll(" ", "") === user.phone.replaceAll(" ", "");
-    if (!samePhone || password !== user.password) {
-      setError("ເບີໂທ ຫຼື Password ບໍ່ຖືກຕ້ອງ");
+    // ຂັ້ນ 4: ກວດວ່າ Email ແລະ Password ກົງກັບທີ່ Register ໄວ້ບໍ່
+    // normalizeEmail = ລຶບຍະຫວ່າງ + ປ່ຽນເປັນຕົວນ້ອຍ ກ່ອນປຽບທຽບ
+    // ເຊັ່ນ "Noy@Gmail.com" ກັບ "noy@gmail.com" ຖືວ່າເປັນ email ດຽວກັນ
+    const sameEmail = normalizeEmail(email) === user.email;
+    if (!sameEmail || password !== user.password) {
+      setError("Email ຫຼື Password ບໍ່ຖືກຕ້ອງ");
       return;
     }
 
@@ -81,24 +81,25 @@ export default function LoginPage() {
     // ສິ່ງທີ່ຢູ່ລະຫວ່າງ <AuthShell> ... </AuthShell> ຈະຖືກໃສ່ເຂົ້າໄປໃນກາດ
     <AuthShell title="Welcome back">
       {/* ----- ຟອມ Login ----- */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {/* ===== ຊ່ອງເບີໂທ ===== */}
+      {/* noValidate = ປິດການກວດອັດຕະໂນມັດຂອງ browser
+          ເພື່ອໃຫ້ສະແດງຂໍ້ຄວາມ error ພາສາລາວຂອງເຮົາເອງແທນ */}
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        {/* ===== ຊ່ອງ Email ===== */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="phone">Phone number</Label>
+          <Label htmlFor="email">Email</Label>
           {/* relative = ໃຫ້ໄອຄອນວາງຊ້ອນຢູ່ໃນຊ່ອງພິມໄດ້ */}
           <div className="relative">
-            {/* ໄອຄອນໂທລະສັບ ວາງຢູ່ຊ້າຍໃນຊ່ອງ
+            {/* ໄອຄອນຊອງຈົດໝາຍ ວາງຢູ່ຊ້າຍໃນຊ່ອງ
                 absolute left-3 = ຫ່າງຊ້າຍ, top-1/2 -translate-y-1/2 = ຈັດກາງແນວຕັ້ງ */}
-            <Phone className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Mail className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              id="phone"
-              type="tel" // tel = ມືຖືຈະເປີດແປ້ນພິມຕົວເລກ
-              placeholder="020 5555 5555"
-              maxLength={13} // ພິມໄດ້ສູງສຸດ 13 ຕົວ (11 ຕົວເລກ + 2 ຍະຫວ່າງ)
+              id="email"
+              type="email" // email = ມືຖືຈະເປີດແປ້ນພິມທີ່ມີປຸ່ມ @
+              placeholder="you@example.com"
               // h-11 = ສູງຂຶ້ນ, pl-10 = ເວັ້ນຊ້າຍໃຫ້ໄອຄອນ
               className="h-11 pl-10"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
         </div>
