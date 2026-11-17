@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation"; // ສັ່ງປ່ຽນໜ້�
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ThemeToggle } from "@/components/theme-toggle"; // ປຸ່ມ dark mode
 import {
   Card,
   CardContent,
@@ -70,6 +71,12 @@ export default function RegisterPage() {
   return (
     // ຈັດກາດໄວ້ກາງໜ້າຈໍ
     <main className="flex flex-1 items-center justify-center p-4">
+      {/* ປຸ່ມ dark mode ຕິດຢູ່ມຸມຂວາເທິງຂອງໜ້າຈໍ
+          fixed = ຢູ່ກັບທີ່ ເຖິງວ່າຈະເລື່ອນໜ້າຈໍ, top-4 right-4 = ຫ່າງຈາກຂອບເທິງ/ຂວາ */}
+      <div className="fixed top-4 right-4">
+        <ThemeToggle />
+      </div>
+
       <Card className="w-full max-w-sm">
         {/* ສ່ວນຫົວຂອງກາດ */}
         <CardHeader>

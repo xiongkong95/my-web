@@ -13,6 +13,8 @@
 import Link from "next/link"; // ລິ້ງໄປໜ້າອື່ນ
 // buttonVariants = ຊຸດ class ຂອງປຸ່ມ, ໃຊ້ເພື່ອໃຫ້ Link ໜ້າຕາຄືປຸ່ມ
 import { buttonVariants } from "@/components/ui/button";
+// ປຸ່ມ dark mode (ເປັນ Client Component ແຕ່ເອົາມາໃຊ້ໃນ Server Component ໄດ້)
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Card,
   CardContent,
@@ -45,8 +47,7 @@ const recentOrders = [
 export default function DashboardPage() {
   return (
     // mx-auto = ຈັດໄວ້ກາງ, max-w-5xl = ກວ້າງສູງສຸດ, p-6 = ໄລຍະຫ່າງຂອບ
-    // pt-20 = ເວັ້ນດ້ານເທິງ ບໍ່ໃຫ້ທັບກັບປຸ່ມ dark mode ມຸມຂວາເທິງ
-    <main className="mx-auto w-full max-w-5xl flex-1 p-6 pt-20">
+    <main className="mx-auto w-full max-w-5xl flex-1 p-6">
       {/* ===== ສ່ວນທີ 1: ຫົວຂໍ້ + ປຸ່ມ Logout =====
           justify-between = ຫົວຂໍ້ຢູ່ຊ້າຍ, ປຸ່ມຢູ່ຂວາ */}
       <div className="mb-6 flex items-center justify-between">
@@ -54,10 +55,14 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">ຍິນດີຕ້ອນຮັບກັບມາ 👋</p>
         </div>
-        {/* ປຸ່ມ Logout: ເປັນ Link ໄປໜ້າ /login, ໃຊ້ buttonVariants ໃຫ້ເບິ່ງຄືປຸ່ມແບບ outline */}
-        <Link href="/login" className={buttonVariants({ variant: "outline" })}>
-          Logout
-        </Link>
+        {/* ປຸ່ມດ້ານຂວາ: dark mode + Logout ວາງຄຽງກັນ (gap-2 = ຫ່າງກັນໜ້ອຍໜຶ່ງ) */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          {/* ປຸ່ມ Logout: ເປັນ Link ໄປໜ້າ /login, ໃຊ້ buttonVariants ໃຫ້ເບິ່ງຄືປຸ່ມແບບ outline */}
+          <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+            Logout
+          </Link>
+        </div>
       </div>
 
       {/* ===== ສ່ວນທີ 2: ກາດສະຖິຕິ =====
