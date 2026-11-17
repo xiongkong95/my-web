@@ -39,5 +39,10 @@ app/
 └── globals.css         → ສີ theme
 components/
 ├── ui/                 → components ຂອງ shadcn
+├── auth-shell.tsx      → ໂຄງຮ່າງຮ່ວມຂອງໜ້າ Login/Register
+├── google-button.tsx   → ເສັ້ນແບ່ງ + ປຸ່ມ Google
+├── icons.tsx           → ໂລໂກ້ ແລະໄອຄອນ SVG
 └── theme-toggle.tsx    → ປຸ່ມສະຫຼັບ dark mode
+lib/
+└── phone.ts            → ຟັງຊັນກວດເບີໂທລາວ
 ```
