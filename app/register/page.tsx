@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { AuthShell } from "@/components/auth-shell"; // ໂຄງຮ່າງໜ້າ (ພື້ນຫຼັງ + ກາດ)
 import { GoogleButton } from "@/components/google-button"; // ເສັ້ນແບ່ງ + ປຸ່ມ Google
 import { isValidLaoPhone } from "@/lib/phone"; // ຟັງຊັນກວດເບີໂທລາວ (ໃຊ້ຮ່ວມກັບໜ້າ Login)
+import { saveUser } from "@/lib/user"; // ບັນທຶກຂໍ້ມູນຜູ້ໃຊ້ໄວ້ໃນ browser
 
 // class ທີ່ໃຊ້ຊ້ຳຫຼາຍເທື່ອ ເກັບໄວ້ໃນຕົວແປ ເພື່ອບໍ່ຕ້ອງພິມຊ້ຳ
 // ໄອຄອນໃນຊ່ອງພິມ: absolute left-3 = ຫ່າງຊ້າຍ, top-1/2 -translate-y-1/2 = ຈັດກາງແນວຕັ້ງ
@@ -78,6 +79,8 @@ export default function RegisterPage() {
 
     // ຖ້າມາຮອດນີ້ = ຂໍ້ມູນຖືກຕ້ອງທັງໝົດ
     setError(""); // ລ້າງ error
+    // ບັນທຶກຊື່ ແລະເບີໂທໄວ້ໃນ browser ເພື່ອໃຫ້ໜ້າ Dashboard ເອົາໄປສະແດງ
+    saveUser({ name: name, phone: phone });
     alert("ລົງທະບຽນສຳເລັດ! ກະລຸນາ Login"); // alert = ສະແດງກ່ອງແຈ້ງເຕືອນ
     router.push("/login"); // ໄປໜ້າ Login
   }

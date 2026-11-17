@@ -6,7 +6,7 @@
 
 - **Login** (`/login`): ເບີໂທ + Password ຫຼື Google
 - **Register** (`/register`): ຟອມ Name, Phone number, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
-- **Dashboard** (`/dashboard`): ກາດສະຖິຕິ ແລະຕາຕະລາງ Order
+- **Dashboard** (`/dashboard`): ພາບລວມການລົງທຶນ: ແຖບເມນູ, Watchlist, Portfolio ແລະກຣາຟ (shadcn Chart)
 - **Theme ຂອງຕົນເອງ**: ສີທອງ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
 - **Dark mode**: ກົດປຸ່ມ 🌙 ຢູ່ມຸມຂວາເທິງ
 
@@ -39,10 +39,13 @@ app/
 └── globals.css         → ສີ theme
 components/
 ├── ui/                 → components ຂອງ shadcn
+├── dashboard/          → ສ່ວນຕ່າງໆຂອງໜ້າ Dashboard (sidebar, header, ກາດ, ກຣາຟ)
 ├── auth-shell.tsx      → ໂຄງຮ່າງຮ່ວມຂອງໜ້າ Login/Register
 ├── google-button.tsx   → ເສັ້ນແບ່ງ + ປຸ່ມ Google
 ├── icons.tsx           → ໂລໂກ້ ແລະໄອຄອນ SVG
 └── theme-toggle.tsx    → ປຸ່ມສະຫຼັບ dark mode
 lib/
-└── phone.ts            → ຟັງຊັນກວດເບີໂທລາວ
+├── phone.ts            → ຟັງຊັນກວດເບີໂທລາວ
+├── user.ts             → ບັນທຶກ/ອ່ານຊື່ຜູ້ໃຊ້ໃນ localStorage
+└── dashboard-data.ts   → ຂໍ້ມູນສົມມຸດຂອງ Dashboard
 ```

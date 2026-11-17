@@ -1,145 +1,63 @@
 // =====================================================================
 // ໜ້າ Dashboard (URL: /dashboard)
 // ---------------------------------------------------------------------
-// ໜ້າທີ່: ສະແດງພາບລວມຂໍ້ມູນ ຫຼັງຈາກ Login ສຳເລັດ
-//   1. ຫົວຂໍ້ + ປຸ່ມ Logout
-//   2. ກາດສະຖິຕິ 4 ອັນ
-//   3. ຕາຕະລາງ Order ລ່າສຸດ
-// ໝາຍເຫດ: ໄຟລ໌ນີ້ບໍ່ມີ "use client" ເພາະບໍ່ມີ useState ຫຼື onClick
-//          ຈຶ່ງເປັນ Server Component (ສ້າງໜ້າຢູ່ server ແລ້ວສົ່ງມາ, ໂຫຼດໄວກວ່າ)
+// ໜ້າທີ່: ສະແດງພາບລວມການລົງທຶນ ຫຼັງຈາກ Login ສຳເລັດ
+// ໄຟລ໌ນີ້ພຽງແຕ່ "ປະກອບ" ສ່ວນຕ່າງໆເຂົ້າກັນ, ລາຍລະອຽດຂອງແຕ່ລະສ່ວນ
+// ຢູ່ໃນໂຟນເດີ components/dashboard/ (ແຍກໄຟລ໌ເພື່ອໃຫ້ອ່ານງ່າຍ)
+//
+// ໂຄງສ້າງ (ຈໍໃຫຍ່):
+//   ┌──────────┬────────────────────────────────────┐
+//   │          │ Header                             │
+//   │ Sidebar  ├───────────┬───────────┬────────────┤
+//   │          │ Holding + │ Watchlist │ Portfolio  │
+//   │          │ Insight   │           │            │
+//   │          ├───────────┴───────────┴────────────┤
+//   │          │ Performance Chart                  │
+//   └──────────┴────────────────────────────────────┘
+// ມືຖື: ເຊື່ອງ Sidebar ແລະລຽງທຸກກາດລົງລຸ່ມເປັນຖັນດຽວ
 // =====================================================================
 
-// ---------- ສ່ວນ import ----------
-import Link from "next/link"; // ລິ້ງໄປໜ້າອື່ນ
-// buttonVariants = ຊຸດ class ຂອງປຸ່ມ, ໃຊ້ເພື່ອໃຫ້ Link ໜ້າຕາຄືປຸ່ມ
-import { buttonVariants } from "@/components/ui/button";
-// ປຸ່ມ dark mode (ເປັນ Client Component ແຕ່ເອົາມາໃຊ້ໃນ Server Component ໄດ້)
-import { ThemeToggle } from "@/components/theme-toggle";
-import { CubeLogo } from "@/components/icons"; // ໂລໂກ້ກ້ອນລູກບາດ
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Sidebar } from "@/components/dashboard/sidebar";
+import { Header } from "@/components/dashboard/header";
+import { TotalHoldingCard } from "@/components/dashboard/total-holding-card";
+import { InsightCard } from "@/components/dashboard/insight-card";
+import { WatchlistCard } from "@/components/dashboard/watchlist-card";
+import { PortfolioCard } from "@/components/dashboard/portfolio-card";
+import { PerformanceChart } from "@/components/dashboard/performance-chart";
 
-// ---------- ຂໍ້ມູນຕົວຢ່າງ (ສົມມຸດ) ----------
-// array = ລາຍການຂໍ້ມູນ [ ... ], ແຕ່ລະອັນເປັນ object { key: value }
-// ໃນວຽກແທ້ ຂໍ້ມູນເຫຼົ່ານີ້ຈະມາຈາກ database ຫຼື API
-
-// ຂໍ້ມູນສຳລັບກາດສະຖິຕິ: title = ຊື່, value = ຕົວເລກ, note = ໝາຍເຫດ
-const stats = [
-  { title: "Users", value: "1,250", note: "+12% ຈາກເດືອນແລ້ວ" },
-  { title: "Orders", value: "320", note: "+5% ຈາກເດືອນແລ້ວ" },
-  { title: "Revenue", value: "$8,400", note: "+18% ຈາກເດືອນແລ້ວ" },
-  { title: "Visitors", value: "5,600", note: "-3% ຈາກເດືອນແລ້ວ" },
-];
-
-// ຂໍ້ມູນສຳລັບຕາຕະລາງ Order
-const recentOrders = [
-  { id: "#1001", customer: "Somchai", amount: "$120", status: "ສຳເລັດ" },
-  { id: "#1002", customer: "Noy", amount: "$75", status: "ກຳລັງສົ່ງ" },
-  { id: "#1003", customer: "Kham", amount: "$210", status: "ສຳເລັດ" },
-  { id: "#1004", customer: "Vanh", amount: "$48", status: "ລໍຖ້າ" },
-];
-
-// ---------- Component ຫຼັກຂອງໜ້າ ----------
 export default function DashboardPage() {
   return (
-    // mx-auto = ຈັດໄວ້ກາງ, max-w-5xl = ກວ້າງສູງສຸດ, p-6 = ໄລຍະຫ່າງຂອບ
-    <main className="mx-auto w-full max-w-5xl flex-1 p-6">
-      {/* ===== ສ່ວນທີ 1: ຫົວຂໍ້ + ປຸ່ມ Logout =====
-          justify-between = ຫົວຂໍ້ຢູ່ຊ້າຍ, ປຸ່ມຢູ່ຂວາ */}
-      <div className="mb-6 flex items-center justify-between">
-        {/* ໂລໂກ້ສີທອງ (ອັນດຽວກັບໜ້າ Login) + ຫົວຂໍ້ */}
-        <div className="flex items-center gap-3">
-          <CubeLogo className="size-10 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">ຍິນດີຕ້ອນຮັບກັບມາ 👋</p>
+    // relative = ໃຫ້ແສງເຮືອງດ້ານຫຼັງວາງຕຳແໜ່ງອີງໃສ່ກ່ອງນີ້
+    // flex gap-4 = Sidebar ກັບເນື້ອຫາຢູ່ຄຽງກັນ, p-4 = ໄລຍະຫ່າງຂອບ
+    <main className="relative flex flex-1 gap-4 overflow-hidden p-4">
+      {/* ແສງເຮືອງສີທອງຈາງໆ ມຸມຂວາເທິງ ໃຫ້ພື້ນຫຼັງມີມິຕິ
+          pointer-events-none = ບໍ່ໃຫ້ບັງການກົດປຸ່ມ */}
+      <div className="pointer-events-none absolute -top-40 right-0 size-120 rounded-full bg-primary/10 blur-3xl" />
+
+      {/* ===== ແຖບເມນູດ້ານຊ້າຍ ===== */}
+      <Sidebar />
+
+      {/* ===== ເນື້ອຫາຫຼັກ =====
+          flex-1 = ກວ້າງເຕັມທີ່ເຫຼືອ, min-w-0 = ກັນເນື້ອຫາລົ້ນອອກ */}
+      <div className="relative flex min-w-0 flex-1 flex-col gap-4">
+        <Header />
+
+        {/* ແຖວກາດ 3 ຖັນ (ຈໍໃຫຍ່), 1 ຖັນ (ມືຖື) */}
+        <div className="grid gap-4 lg:grid-cols-3">
+          {/* ຖັນທີ 1: ກາດ 2 ອັນຊ້ອນກັນ */}
+          <div className="flex flex-col gap-4">
+            <TotalHoldingCard />
+            <InsightCard />
           </div>
+          {/* ຖັນທີ 2 */}
+          <WatchlistCard />
+          {/* ຖັນທີ 3 */}
+          <PortfolioCard />
         </div>
-        {/* ປຸ່ມດ້ານຂວາ: dark mode + Logout ວາງຄຽງກັນ (gap-2 = ຫ່າງກັນໜ້ອຍໜຶ່ງ) */}
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          {/* ປຸ່ມ Logout: ເປັນ Link ໄປໜ້າ /login, ໃຊ້ buttonVariants ໃຫ້ເບິ່ງຄືປຸ່ມແບບ outline */}
-          <Link href="/login" className={buttonVariants({ variant: "outline" })}>
-            Logout
-          </Link>
-        </div>
-      </div>
 
-      {/* ===== ສ່ວນທີ 2: ກາດສະຖິຕິ =====
-          grid = ຈັດເປັນຕາຕະລາງ:
-            - ມືຖື: 1 ຖັນ
-            - sm:grid-cols-2 = ຈໍຂະໜາດກາງ: 2 ຖັນ
-            - lg:grid-cols-4 = ຈໍໃຫຍ່: 4 ຖັນ */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {/* .map() = ວົນຊ້ຳທຸກລາຍການໃນ array stats ແລ້ວສ້າງ Card ໃຫ້ແຕ່ລະອັນ
-            item = ລາຍການປັດຈຸບັນໃນແຕ່ລະຮອບ
-            key = ຄ່າບໍ່ຊ້ຳກັນ ທີ່ React ຕ້ອງການເມື່ອສ້າງລາຍການດ້ວຍ .map() */}
-        {stats.map((item) => (
-          <Card key={item.title}>
-            <CardHeader>
-              <CardDescription>{item.title}</CardDescription>
-              {/* text-primary = ຕົວເລກສີທອງ ໃຫ້ເດັ່ນ */}
-              <CardTitle className="text-2xl text-primary">{item.value}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">{item.note}</p>
-            </CardContent>
-          </Card>
-        ))}
+        {/* ກຣາຟ ກວ້າງເຕັມແຖວ */}
+        <PerformanceChart />
       </div>
-
-      {/* ===== ສ່ວນທີ 3: ຕາຕະລາງ Order ລ່າສຸດ ===== */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Order ລ່າສຸດ</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* <table> = ຕາຕະລາງ HTML
-              <thead> = ແຖວຫົວຕາຕະລາງ, <tbody> = ເນື້ອໃນ
-              <tr> = 1 ແຖວ, <th> = ຫ້ອງຫົວຂໍ້, <td> = ຫ້ອງຂໍ້ມູນ */}
-          <table className="w-full text-sm">
-            <thead>
-              {/* border-b = ເສັ້ນຂອບລຸ່ມ, text-left = ຈັດຕົວໜັງສືຊ້າຍ */}
-              <tr className="border-b text-left text-muted-foreground">
-                <th className="py-2">ID</th>
-                <th className="py-2">ລູກຄ້າ</th>
-                <th className="py-2">ລາຄາ</th>
-                <th className="py-2">ສະຖານະ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* ວົນສ້າງແຖວຈາກ array recentOrders (ຄືກັບກາດຂ້າງເທິງ)
-                  last:border-0 = ແຖວສຸດທ້າຍບໍ່ມີເສັ້ນຂອບລຸ່ມ */}
-              {recentOrders.map((order) => (
-                <tr key={order.id} className="border-b last:border-0">
-                  <td className="py-2">{order.id}</td>
-                  <td className="py-2">{order.customer}</td>
-                  <td className="py-2">{order.amount}</td>
-                  <td className="py-2">
-                    {/* ປ້າຍສະຖານະ: rounded-full = ມົນເປັນເມັດຢາ
-                        ຖ້າສະຖານະເປັນ "ສຳເລັດ" ໃຊ້ສີທອງອ່ອນ (bg-primary/15 = ສີທອງ ຄວາມເຂັ້ມ 15%)
-                        ຖ້າບໍ່ແມ່ນ ໃຊ້ສີເທົາອ່ອນ (bg-secondary) */}
-                    <span
-                      className={
-                        order.status === "ສຳເລັດ"
-                          ? "rounded-full bg-primary/15 px-2 py-1 text-xs text-primary"
-                          : "rounded-full bg-secondary px-2 py-1 text-xs"
-                      }
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
     </main>
   );
 }
