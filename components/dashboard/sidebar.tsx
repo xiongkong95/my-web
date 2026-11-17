@@ -1,33 +1,33 @@
 // =====================================================================
 // Sidebar — ແຖບເມນູດ້ານຊ້າຍຂອງ Dashboard
 // ---------------------------------------------------------------------
-// - ເທິງ: ໂລໂກ້ + ຊື່ "My Web"
-// - ກາງ: ເມນູຫຼັກ (Dashboard, Portfolio, ...)
+// - ເທິງ: ໂລໂກ້ລົດ + ຊື່ຮ້ານ "Moora Auto Service"
+// - ກາງ: ເມນູຫຼັກ (Dashboard, Cars, Orders, ...)
 // - ລຸ່ມ: Settings, Support, Logout
 // ໝາຍເຫດ: ເມນູຍັງບໍ່ມີໜ້າແທ້ (href="#") ຍົກເວັ້ນ Logout (ໃຊ້ LogoutButton)
 // =====================================================================
 
 import Link from "next/link";
 import {
-  Briefcase,
-  ChartLine,
+  Car,
+  ChartColumn,
+  ClipboardList,
   LayoutDashboard,
   LifeBuoy,
   LogOut,
   Settings,
-  TrendingUp,
   Users,
 } from "lucide-react";
-import { CubeLogo } from "@/components/icons";
+import { CarLogo } from "@/components/icons";
 import { LogoutButton } from "@/components/dashboard/logout-button";
 
 // ລາຍການເມນູຫຼັກ: label = ຂໍ້ຄວາມ, icon = ໄອຄອນ, active = ເປັນໜ້າປັດຈຸບັນບໍ່
 const mainMenu = [
   { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Portfolio", icon: Briefcase, active: false },
-  { label: "Analysis", icon: ChartLine, active: false },
-  { label: "Market", icon: TrendingUp, active: false },
-  { label: "Community", icon: Users, active: false },
+  { label: "Cars", icon: Car, active: false }, // ລົດທັງໝົດໃນສາງ
+  { label: "Orders", icon: ClipboardList, active: false }, // ການສັ່ງຊື້
+  { label: "Customers", icon: Users, active: false }, // ລູກຄ້າ
+  { label: "Reports", icon: ChartColumn, active: false }, // ລາຍງານ
 ];
 
 // ເມນູດ້ານລຸ່ມ
@@ -46,10 +46,14 @@ export function Sidebar() {
     // hidden lg:flex = ເຊື່ອງໃນມືຖື, ສະແດງສະເພາະຈໍໃຫຍ່
     // w-60 = ກວ້າງຄົງທີ່, shrink-0 = ບໍ່ໃຫ້ຖືກບີບໃຫ້ແຄບລົງ
     <aside className="hidden w-60 shrink-0 flex-col rounded-2xl border bg-card p-4 lg:flex">
-      {/* ----- ໂລໂກ້ + ຊື່ແບຣນ ----- */}
-      <div className="mb-8 flex items-center gap-2 px-2 pt-2">
-        <CubeLogo className="size-7 text-primary" />
-        <span className="text-lg font-semibold">My Web</span>
+      {/* ----- ໂລໂກ້ລົດ + ຊື່ຮ້ານ (2 ແຖວ ເພາະຊື່ຍາວ) ----- */}
+      <div className="mb-8 flex items-center gap-3 px-2 pt-2">
+        <CarLogo className="w-12 shrink-0 text-primary" />
+        {/* leading-tight = ໄລຍະຫ່າງລະຫວ່າງແຖວແຄບລົງ */}
+        <div className="leading-tight">
+          <p className="font-semibold">Moora Auto</p>
+          <p className="text-xs text-muted-foreground">Service</p>
+        </div>
       </div>
 
       {/* ----- ເມນູຫຼັກ -----

@@ -1,12 +1,12 @@
-﻿# my-web
+﻿# Moora Auto Service 🚗
 
-ໂປຣເຈັກວຽກບ້ານ: ໜ້າ **Login**, **Register** ແລະ **Dashboard** ສ້າງດ້ວຍ Next.js + shadcn/ui
+ໂປຣເຈັກວຽກບ້ານ: ເວັບຮ້ານຂາຍລົດ ມີໜ້າ **Login**, **Register** ແລະ **Dashboard** ສ້າງດ້ວຍ Next.js + shadcn/ui
 
 ## ✨ ສິ່ງທີ່ມີ
 
 - **Login** (`/login`): Email + Password (ກວດກັບບັນຊີທີ່ Register ໄວ້) ຫຼື Google
 - **Register** (`/register`): ຟອມ Name, Email, Password, Confirm password ພ້ອມກວດຂໍ້ມູນ
-- **Dashboard** (`/dashboard`): ພາບລວມການລົງທຶນ: ແຖບເມນູ, Watchlist, Portfolio ແລະກຣາຟ (shadcn Chart). ຕ້ອງ Login ກ່ອນຈຶ່ງເຂົ້າໄດ້
+- **Dashboard** (`/dashboard`): ພາບລວມຂອງຮ້ານ ສຳລັບເຈົ້າຂອງຮ້ານ: ກາດສະຖິຕິ (ລົດໃນສາງ, ຂາຍໄດ້, ລາຍຮັບ, ລູກຄ້າໃໝ່), ກຣາຟຍອດຂາຍ (shadcn Chart), ລົດຂາຍດີ ແລະລາຍການສັ່ງຊື້ລ່າສຸດ. ລາຄາສະແດງທັງ ກີບ (₭) ແລະ ໂດລາ ($). ຕ້ອງ Login ກ່ອນຈຶ່ງເຂົ້າໄດ້
 - **Theme ຂອງຕົນເອງ**: ສີທອງ (ແກ້ `--primary` ແລະ `--radius` ໃນ `app/globals.css`)
 - **Dark mode**: ກົດປຸ່ມ 🌙 ຢູ່ມຸມຂວາເທິງ
 
@@ -28,6 +28,27 @@ npm run dev
 
 ແລ້ວເປີດ [http://localhost:3000](http://localhost:3000)
 
+## 📷 ໃສ່ຮູບລົດ
+
+ສ້າງໂຟນເດີ `public/cars/` ແລ້ວໃສ່ຮູບລົດ ໃຫ້ຊື່ໄຟລ໌ກົງກັບລາຍການນີ້:
+
+| ລົດ | ຊື່ໄຟລ໌ |
+| --- | --- |
+| Toyota Camry | `camry.jpg` |
+| Honda Civic | `civic.jpg` |
+| Mazda 3 | `mazda3.jpg` |
+| Toyota Fortuner | `fortuner.jpg` |
+| Ford Everest | `everest.jpg` |
+| Hyundai Santa Fe | `santafe.jpg` |
+| Toyota Hilux Revo | `hilux.jpg` |
+| Ford Ranger | `ranger.jpg` |
+| Isuzu D-Max | `dmax.jpg` |
+
+- ຮູບແນວນອນ (ກວ້າງກວ່າສູງ) ຈະເບິ່ງງາມທີ່ສຸດ
+- ຖ້າຍັງບໍ່ມີຮູບ ເວັບຈະສະແດງໄອຄອນລົດແທນ
+- ຢາກປ່ຽນຊື່ໄຟລ໌ ຫຼືໃຊ້ `.png`: ແກ້ `image` ໃນ `lib/dashboard-data.ts`
+- ອັດຕາແລກປ່ຽນ ($ → ₭) ແກ້ໄດ້ທີ່ `KIP_PER_USD` ໃນໄຟລ໌ດຽວກັນ
+
 ## 📁 ໂຄງສ້າງໄຟລ໌
 
 ```
@@ -40,13 +61,16 @@ app/
 └── globals.css         → ສີ theme
 components/
 ├── ui/                 → components ຂອງ shadcn
-├── dashboard/          → ສ່ວນຕ່າງໆຂອງໜ້າ Dashboard (sidebar, header, ກາດ, ກຣາຟ)
+├── dashboard/          → ສ່ວນຕ່າງໆຂອງໜ້າ Dashboard (sidebar, header, ກາດສະຖິຕິ,
+│                         ກຣາຟຍອດຂາຍ, ລົດຂາຍດີ, ລາຍການສັ່ງຊື້, ຮູບລົດ)
 ├── auth-shell.tsx      → ໂຄງຮ່າງຮ່ວມຂອງໜ້າ Login/Register
 ├── google-button.tsx   → ເສັ້ນແບ່ງ + ປຸ່ມ Google
-├── icons.tsx           → ໂລໂກ້ ແລະໄອຄອນ SVG
+├── icons.tsx           → ໂລໂກ້ລົດ ແລະໄອຄອນ SVG
 └── theme-toggle.tsx    → ປຸ່ມສະຫຼັບ dark mode
 lib/
 ├── email.ts            → ຟັງຊັນກວດ email
 ├── user.ts             → ບັນທຶກ/ອ່ານບັນຊີ ແລະສະຖານະ Login ໃນ localStorage
-└── dashboard-data.ts   → ຂໍ້ມູນສົມມຸດຂອງ Dashboard
+└── dashboard-data.ts   → ຂໍ້ມູນສົມມຸດຂອງ Dashboard + ຟັງຊັນສະແດງລາຄາ ₭ / $
+public/
+└── cars/               → ຮູບລົດ (ເຈົ້າໃສ່ເອງ)
 ```

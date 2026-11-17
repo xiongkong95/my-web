@@ -25,8 +25,8 @@ const geistMono = Geist_Mono({
 // ---------- Metadata ----------
 // title = ຊື່ທີ່ສະແດງຢູ່ແທັບ browser, description = ຄຳອະທິບາຍເວັບ (ໃຊ້ໃນ Google)
 export const metadata: Metadata = {
-  title: "My Web",
-  description: "Login, Register and Dashboard with shadcn/ui",
+  title: "Moora Auto Service",
+  description: "Moora Auto Service: car showroom dashboard (Login, Register, Dashboard)",
 };
 
 // ---------- Component Layout ----------

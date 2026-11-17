@@ -1,8 +1,8 @@
 // =====================================================================
-// ກາດ Portfolio Performance — ກຣາຟພື້ນທີ່ (Area chart) ສີທອງ
+// ກາດ Sales Overview — ກຣາຟຍອດຂາຍ (Area chart) ສີທອງ
 // ---------------------------------------------------------------------
-// - ກົດປຸ່ມ 1D / 1W / 1M / 6M / 1Y ເພື່ອປ່ຽນຊ່ວງເວລາ
-// - ເລື່ອນເມົ້າໃສ່ກຣາຟ ຈະເຫັນ tooltip ບອກມູນຄ່າ
+// - ກົດປຸ່ມ 1W / 1M / 6M / 1Y ເພື່ອປ່ຽນຊ່ວງເວລາ
+// - ເລື່ອນເມົ້າໃສ່ກຣາຟ ຈະເຫັນ tooltip ບອກຍອດຂາຍ ທັງ ກີບ ແລະ ໂດລາ
 // ໃຊ້ shadcn Chart (ຂ້າງໃນແມ່ນ library ຊື່ recharts)
 // =====================================================================
 
@@ -21,29 +21,38 @@ import {
   ChartTooltipContent, // ໜ້າຕາຂອງ tooltip ແບບ shadcn
   type ChartConfig,
 } from "@/components/ui/chart";
-import { formatMoney, performance, type ChartRange } from "@/lib/dashboard-data";
+import { formatKip, formatKipShort, formatUSD, sales, type ChartRange } from "@/lib/dashboard-data";
 
 // ປຸ່ມເລືອກຊ່ວງເວລາ
-const ranges: ChartRange[] = ["1D", "1W", "1M", "6M", "1Y"];
+const ranges: ChartRange[] = ["1W", "1M", "6M", "1Y"];
 
-// ຕັ້ງຄ່າກຣາຟ: ຂໍ້ມູນ "value" ໃຫ້ຊື່ວ່າ "Value" ແລະໃຊ້ສີ primary (ສີທອງ)
+// ຕັ້ງຄ່າກຣາຟ: ຂໍ້ມູນ "value" ໃຫ້ຊື່ວ່າ "Sales" ແລະໃຊ້ສີ primary (ສີທອງ)
 // ChartContainer ຈະສ້າງ CSS variable ຊື່ --color-value ໃຫ້ເຮົາໃຊ້
 const chartConfig = {
-  value: { label: "Value", color: "var(--primary)" },
+  value: { label: "Sales", color: "var(--primary)" },
 } satisfies ChartConfig;
 
-export function PerformanceChart() {
-  // ຊ່ວງເວລາທີ່ເລືອກຢູ່ (ເລີ່ມຕົ້ນ = 1Y)
-  const [range, setRange] = useState<ChartRange>("1Y");
+export function SalesChart() {
+  // ຊ່ວງເວລາທີ່ເລືອກຢູ່ (ເລີ່ມຕົ້ນ = 6M)
+  const [range, setRange] = useState<ChartRange>("6M");
 
   // ຂໍ້ມູນຂອງຊ່ວງເວລາທີ່ເລືອກ
-  const data = performance[range];
+  const data = sales[range];
+
+  // ຍອດລວມຂອງຊ່ວງເວລານີ້: reduce = ບວກຄ່າທຸກຈຸດເຂົ້າກັນ (ເລີ່ມຈາກ 0)
+  const total = data.reduce((sum, point) => sum + point.value, 0);
 
   return (
-    <Card className="gap-4 p-5">
-      {/* ----- ແຖວຫົວ: ຫົວຂໍ້ + ປຸ່ມເລືອກຊ່ວງເວລາ ----- */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="font-medium">Portfolio Performance</h3>
+    // h-full = ສູງເທົ່າກາດອື່ນໃນແຖວດຽວກັນ
+    <Card className="h-full gap-4 p-5">
+      {/* ----- ແຖວຫົວ: ຫົວຂໍ້ + ຍອດລວມ + ປຸ່ມເລືອກຊ່ວງເວລາ ----- */}
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 className="font-medium">Sales Overview</h3>
+          {/* ຍອດລວມ: ກີບ (ໃຫຍ່) + ໂດລາ (ນ້ອຍ) */}
+          <p className="mt-1 text-2xl font-semibold">{formatKip(total)}</p>
+          <p className="text-sm text-muted-foreground">≈ {formatUSD(total)}</p>
+        </div>
         <div className="flex gap-1.5">
           {ranges.map((r) => (
             <button
@@ -82,20 +91,20 @@ export function PerformanceChart() {
           {/* ແກນນອນ: ໃຊ້ຄ່າ label ຂອງແຕ່ລະຈຸດ, ບໍ່ມີເສັ້ນແກນ */}
           <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} />
 
-          {/* ແກນຕັ້ງ: ສະແດງເປັນ "150k" ແທນ "150000"
+          {/* ແກນຕັ້ງ: ສະແດງເປັນກີບແບບສັ້ນ ເຊັ່ນ "6.45B ₭"
               tickFormatter = ຟັງຊັນປ່ຽນຮູບແບບຕົວເລກ */}
           <YAxis
-            width={44}
+            width={64}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value: number) => `${value / 1000}k`}
+            tickFormatter={(value: number) => formatKipShort(value)}
           />
 
-          {/* tooltip ເວລາເລື່ອນເມົ້າ: ສະແດງມູນຄ່າເປັນເງິນ */}
+          {/* tooltip ເວລາເລື່ອນເມົ້າ: ສະແດງທັງ ກີບ ແລະ ໂດລາ */}
           <ChartTooltip
             content={
               <ChartTooltipContent
-                formatter={(value) => formatMoney(Number(value))}
+                formatter={(value) => `${formatKip(Number(value))} (${formatUSD(Number(value))})`}
                 indicator="line"
               />
             }

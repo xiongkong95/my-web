@@ -4,8 +4,8 @@
 // ສ້າງໄວ້ບ່ອນດຽວ ເພື່ອໃຫ້ທັງ 2 ໜ້າໜ້າຕາຄືກັນ ແລະບໍ່ຕ້ອງຂຽນ code ຊ້ຳ
 // ສິ່ງທີ່ມີໃນນີ້:
 //   - ພື້ນຫຼັງມືດ ລາຍເສັ້ນ blueprint ເຕັມໜ້າຈໍ
-//   - ຮູບກ້ອນລູກບາດໃຫຍ່ດ້ານຊ້າຍ (ສະແດງສະເພາະຈໍໃຫຍ່)
-//   - ກາດດ້ານຂວາ + ປຸ່ມ dark mode + ໂລໂກ້ + ຫົວຂໍ້
+//   - ຮູບລົດໃຫຍ່ + ຊື່ຮ້ານ + ຄຳຂວັນ ດ້ານຊ້າຍ (ສະແດງສະເພາະຈໍໃຫຍ່)
+//   - ກາດດ້ານຂວາ + ປຸ່ມ dark mode + ໂລໂກ້ລົດ + ຊື່ຮ້ານ + ຫົວຂໍ້
 //   - ເນື້ອໃນ (children) ເຊັ່ນ ຟອມ ຈະຖືກໃສ່ເຂົ້າໄປໃນກາດ
 // ວິທີໃຊ້:
 //   <AuthShell title="Welcome back">
@@ -13,7 +13,7 @@
 //   </AuthShell>
 // =====================================================================
 
-import { CubeLogo } from "@/components/icons";
+import { CarLogo } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 // ປະເພດຂອງ props ທີ່ component ນີ້ຮັບ:
@@ -43,10 +43,18 @@ export function AuthShell({ title, children }: AuthShellProps) {
       {/* ແສງເງົາມືດອ້ອມຂອບ ໃຫ້ພາບເບິ່ງມີມິຕິ (radial-gradient = ໄລ່ສີເປັນວົງມົນ) */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,transparent_10%,#09090b_70%)]" />
 
-      {/* ===== ຝັ່ງຊ້າຍ: ຮູບກ້ອນລູກບາດໃຫຍ່ =====
-          hidden lg:flex = ເຊື່ອງໃນມືຖື, ສະແດງສະເພາະຈໍໃຫຍ່ */}
-      <div className="relative hidden items-center justify-center lg:flex">
-        <CubeLogo className="size-72 text-zinc-600" />
+      {/* ===== ຝັ່ງຊ້າຍ: ຮູບລົດໃຫຍ່ + ຊື່ຮ້ານ + ຄຳຂວັນ =====
+          hidden lg:flex = ເຊື່ອງໃນມືຖື, ສະແດງສະເພາະຈໍໃຫຍ່
+          flex-col = ລຽງລົງລຸ່ມ, text-center = ຈັດຂໍ້ຄວາມກາງ */}
+      <div className="relative hidden flex-col items-center justify-center gap-8 text-center lg:flex">
+        {/* w-[28rem] = ກວ້າງ 448px */}
+        <CarLogo className="w-[28rem] text-zinc-600" />
+        <div className="flex flex-col gap-2">
+          {/* tracking-widest = ຫ່າງຕົວອັກສອນ, uppercase = ຕົວໃຫຍ່ທັງໝົດ */}
+          <p className="text-sm tracking-widest text-primary uppercase">Moora Auto Service</p>
+          <p className="text-3xl font-medium text-zinc-200">Find your dream car</p>
+          <p className="text-zinc-400">ລົດໃໝ່ຄຸນນະພາບ ພ້ອມບໍລິການຫຼັງການຂາຍ</p>
+        </div>
       </div>
 
       {/* ===== ຝັ່ງຂວາ: ກາດ =====
@@ -62,10 +70,11 @@ export function AuthShell({ title, children }: AuthShellProps) {
             <ThemeToggle />
           </div>
 
-          {/* ໂລໂກ້ສີທອງ + ຫົວຂໍ້ (ຮັບມາຈາກ props title) */}
-          <div className="mb-8 flex flex-col items-center gap-4">
-            <CubeLogo className="size-16 text-primary" />
-            <h1 className="text-3xl font-medium">{title}</h1>
+          {/* ໂລໂກ້ລົດສີທອງ + ຊື່ຮ້ານ + ຫົວຂໍ້ (ຮັບມາຈາກ props title) */}
+          <div className="mb-8 flex flex-col items-center gap-2">
+            <CarLogo className="w-28 text-primary" />
+            <p className="text-xs tracking-widest text-muted-foreground uppercase">Moora Auto Service</p>
+            <h1 className="mt-2 text-3xl font-medium">{title}</h1>
           </div>
 
           {/* ເນື້ອໃນຂອງແຕ່ລະໜ້າ (ຟອມ Login ຫຼື Register) */}

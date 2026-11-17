@@ -1,18 +1,19 @@
 // =====================================================================
-// ໜ້າ Dashboard (URL: /dashboard)
+// ໜ້າ Dashboard (URL: /dashboard) — ຮ້ານຂາຍລົດ Moora Auto Service
 // ---------------------------------------------------------------------
-// ໜ້າທີ່: ສະແດງພາບລວມການລົງທຶນ ຫຼັງຈາກ Login ສຳເລັດ
+// ໜ້າທີ່: ໃຫ້ເຈົ້າຂອງຮ້ານເບິ່ງພາບລວມ: ຍອດຂາຍ, ລົດໃນສາງ ແລະການສັ່ງຊື້
 // ໄຟລ໌ນີ້ພຽງແຕ່ "ປະກອບ" ສ່ວນຕ່າງໆເຂົ້າກັນ, ລາຍລະອຽດຂອງແຕ່ລະສ່ວນ
 // ຢູ່ໃນໂຟນເດີ components/dashboard/ (ແຍກໄຟລ໌ເພື່ອໃຫ້ອ່ານງ່າຍ)
 //
 // ໂຄງສ້າງ (ຈໍໃຫຍ່):
 //   ┌──────────┬────────────────────────────────────┐
 //   │          │ Header                             │
-//   │ Sidebar  ├───────────┬───────────┬────────────┤
-//   │          │ Holding + │ Watchlist │ Portfolio  │
-//   │          │ Insight   │           │            │
-//   │          ├───────────┴───────────┴────────────┤
-//   │          │ Performance Chart                  │
+//   │          ├────────┬────────┬────────┬─────────┤
+//   │ Sidebar  │ ສາງ    │ ຂາຍໄດ້  │ ລາຍຮັບ  │ ລູກຄ້າ   │  ← ກາດສະຖິຕິ
+//   │          ├────────┴────────┴────────┼─────────┤
+//   │          │ Sales Chart (2 ສ່ວນ)      │ Top Cars│
+//   │          ├──────────────────────────┴─────────┤
+//   │          │ Recent Orders                      │
 //   └──────────┴────────────────────────────────────┘
 // ມືຖື: ເຊື່ອງ Sidebar ແລະລຽງທຸກກາດລົງລຸ່ມເປັນຖັນດຽວ
 // =====================================================================
@@ -20,18 +21,17 @@
 import { AuthGuard } from "@/components/dashboard/auth-guard";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header";
-import { TotalHoldingCard } from "@/components/dashboard/total-holding-card";
-import { InsightCard } from "@/components/dashboard/insight-card";
-import { WatchlistCard } from "@/components/dashboard/watchlist-card";
-import { PortfolioCard } from "@/components/dashboard/portfolio-card";
-import { PerformanceChart } from "@/components/dashboard/performance-chart";
+import { StatCards } from "@/components/dashboard/stat-cards";
+import { SalesChart } from "@/components/dashboard/sales-chart";
+import { TopCarsCard } from "@/components/dashboard/top-cars-card";
+import { RecentOrdersCard } from "@/components/dashboard/recent-orders-card";
 
 export default function DashboardPage() {
   return (
-    // relative = ໃຫ້ແສງເຮືອງດ້ານຫຼັງວາງຕຳແໜ່ງອີງໃສ່ກ່ອງນີ້
-    // flex gap-4 = Sidebar ກັບເນື້ອຫາຢູ່ຄຽງກັນ, p-4 = ໄລຍະຫ່າງຂອບ
     // AuthGuard = ກວດວ່າ Login ແລ້ວບໍ່, ຖ້າຍັງ ຈະສົ່ງກັບໄປໜ້າ /login
     <AuthGuard>
+      {/* relative = ໃຫ້ແສງເຮືອງດ້ານຫຼັງວາງຕຳແໜ່ງອີງໃສ່ກ່ອງນີ້
+          flex gap-4 = Sidebar ກັບເນື້ອຫາຢູ່ຄຽງກັນ, p-4 = ໄລຍະຫ່າງຂອບ */}
       <main className="relative flex flex-1 gap-4 overflow-hidden p-4">
         {/* ແສງເຮືອງສີທອງຈາງໆ ມຸມຂວາເທິງ ໃຫ້ພື້ນຫຼັງມີມິຕິ
             pointer-events-none = ບໍ່ໃຫ້ບັງການກົດປຸ່ມ */}
@@ -45,21 +45,20 @@ export default function DashboardPage() {
         <div className="relative flex min-w-0 flex-1 flex-col gap-4">
           <Header />
 
-          {/* ແຖວກາດ 3 ຖັນ (ຈໍໃຫຍ່), 1 ຖັນ (ມືຖື) */}
-          <div className="grid gap-4 lg:grid-cols-3">
-            {/* ຖັນທີ 1: ກາດ 2 ອັນຊ້ອນກັນ */}
-            <div className="flex flex-col gap-4">
-              <TotalHoldingCard />
-              <InsightCard />
+          {/* ກາດສະຖິຕິ 4 ອັນ */}
+          <StatCards />
+
+          {/* ແຖວກຣາຟ + ລົດຂາຍດີ: ຈໍໃຫຍ່ແບ່ງ 3 ສ່ວນ (ກຣາຟ 2 ສ່ວນ, ລົດ 1 ສ່ວນ) */}
+          <div className="grid gap-4 xl:grid-cols-3">
+            {/* xl:col-span-2 = ກວ້າງ 2 ຖັນ */}
+            <div className="xl:col-span-2">
+              <SalesChart />
             </div>
-            {/* ຖັນທີ 2 */}
-            <WatchlistCard />
-            {/* ຖັນທີ 3 */}
-            <PortfolioCard />
+            <TopCarsCard />
           </div>
 
-          {/* ກຣາຟ ກວ້າງເຕັມແຖວ */}
-          <PerformanceChart />
+          {/* ລາຍການສັ່ງຊື້ ກວ້າງເຕັມແຖວ */}
+          <RecentOrdersCard />
         </div>
       </main>
     </AuthGuard>

@@ -2,7 +2,7 @@
 // Header — ສ່ວນຫົວຂອງ Dashboard
 // ---------------------------------------------------------------------
 // - ແຖວທີ 1: "Welcome, <ຊື່>" + ປຸ່ມ 🔔 ⚙️ dark mode + ໂປຣໄຟລ໌
-// - ແຖວທີ 2: ແທັບ Market / Wallet / Tools + ຊ່ອງຄົ້ນຫາ
+// - ແຖວທີ 2: ແທັບ Overview / Sales / Inventory + ຊ່ອງຄົ້ນຫາ
 // ຊື່ ແລະ email ດຶງມາຈາກ localStorage (ບັນທຶກໄວ້ຕອນ Register)
 // =====================================================================
 
@@ -18,13 +18,13 @@ import { LogoutButton } from "@/components/dashboard/logout-button";
 import { loadUser, type User } from "@/lib/user";
 
 // ລາຍການແທັບ
-const tabs = ["Market", "Wallet", "Tools"];
+const tabs = ["Overview", "Sales", "Inventory"];
 
 export function Header() {
   // ຂໍ້ມູນຜູ້ໃຊ້: ເລີ່ມຕົ້ນເປັນ null (ຍັງບໍ່ໄດ້ອ່ານ)
   const [user, setUser] = useState<User | null>(null);
   // ແທັບທີ່ເລືອກຢູ່
-  const [activeTab, setActiveTab] = useState("Wallet");
+  const [activeTab, setActiveTab] = useState("Overview");
 
   // ອ່ານຂໍ້ມູນຜູ້ໃຊ້ຈາກ localStorage ຫຼັງຈາກໜ້າສະແດງແລ້ວ
   // (ຕ້ອງເຮັດໃນ useEffect ເພາະ localStorage ມີສະເພາະໃນ browser, ບໍ່ມີຢູ່ server)
@@ -50,7 +50,7 @@ export function Header() {
           <h1 className="text-2xl font-semibold sm:text-3xl">
             Welcome, <span className="text-primary">{name}</span>
           </h1>
-          <p className="text-sm text-muted-foreground">Here&apos;s your investment portfolio overview</p>
+          <p className="text-sm text-muted-foreground">Here&apos;s what&apos;s happening at your showroom today</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export function Header() {
         {/* ຊ່ອງຄົ້ນຫາ (ພຽງໜ້າຕາ ຍັງຄົ້ນຫາບໍ່ໄດ້) */}
         <div className="relative w-full sm:w-72">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Search stocks..." className="h-10 rounded-full bg-card pl-10" />
+          <Input placeholder="Search cars, customers..." className="h-10 rounded-full bg-card pl-10" />
         </div>
       </div>
     </header>
