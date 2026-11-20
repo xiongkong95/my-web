@@ -1,13 +1,3 @@
-// =====================================================================
-// Chart (ກຣາຟ) — ໄຟລ໌ນີ້ສ້າງໂດຍ shadcn (ບໍ່ຈຳເປັນຕ້ອງແກ້)
-// ---------------------------------------------------------------------
-// ຫຸ້ມ library "recharts" ໃຫ້ເຂົ້າກັບ theme:
-//   ChartContainer      = ກ່ອງຫຸ້ມກຣາຟ, ຮັບ config ສີ ແລ້ວສ້າງ --color-<key> ໃຫ້
-//   ChartTooltip        = tooltip ເວລາເລື່ອນເມົ້າ
-//   ChartTooltipContent = ໜ້າຕາຂອງ tooltip
-// ຕົວຢ່າງການໃຊ້: components/dashboard/performance-chart.tsx
-// =====================================================================
-
 "use client"
 
 import * as React from "react"
@@ -15,7 +5,6 @@ import { cn } from "cn"
 import * as RechartsPrimitive from "recharts"
 import type { TooltipValueType } from "recharts"
 
-// Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
 
 const INITIAL_DIMENSION = { width: 320, height: 200 } as const
