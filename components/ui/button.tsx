@@ -1,12 +1,3 @@
-// =====================================================================
-// Button (ປຸ່ມ) — ໄຟລ໌ນີ້ສ້າງໂດຍ shadcn (ບໍ່ຈຳເປັນຕ້ອງແກ້)
-// ---------------------------------------------------------------------
-// buttonVariants = ລາຍການ class ຂອງ Tailwind ສຳລັບແຕ່ລະແບບຂອງປຸ່ມ:
-//   variant: default (ສີ primary), outline (ມີແຕ່ຂອບ), secondary, ghost, destructive (ສີແດງ), link
-//   size:    default, xs, sm, lg, icon (ປຸ່ມສີ່ຫຼ່ຽມສຳລັບໄອຄອນ)
-// ວິທີໃຊ້: <Button variant="outline" size="sm">ກົດ</Button>
-// =====================================================================
-
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"

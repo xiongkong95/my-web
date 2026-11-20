@@ -1,29 +1,12 @@
-// =====================================================================
-// ຂໍ້ຄວາມທັງໝົດຂອງເວັບ ໃນ 2 ພາສາ: ລາວ (lo) ແລະ ອັງກິດ (en)
-// ---------------------------------------------------------------------
-// - ພາສາລາວ = ພາສາຫຼັກ (ເປີດເວັບມາຈະເປັນພາສານີ້)
-// - ພາສາອັງກິດ = ພາສາສຳຮອງ (ກົດປຸ່ມ EN ເພື່ອປ່ຽນ)
-// ວິທີແກ້ຂໍ້ຄວາມ: ແກ້ຢູ່ໄຟລ໌ນີ້ບ່ອນດຽວ ທຸກໜ້າຈະປ່ຽນຕາມ
-// ວິທີເພີ່ມຂໍ້ຄວາມໃໝ່: ເພີ່ມ key ດຽວກັນໃນທັງ lo ແລະ en
-//   (ຖ້າລືມເພີ່ມໃນ en, TypeScript ຈະແຈ້ງ error ໃຫ້ ເພາະ en ຕ້ອງມີ key ຄືກັບ lo)
-// ວິທີໃຊ້ໃນ component:
-//   const { t } = useLanguage();
-//   <h1>{t.login.title}</h1>
-// =====================================================================
-
-// ພາສາທີ່ຮອງຮັບ
 export type Lang = "lo" | "en";
 
-// ---------- ພາສາລາວ (ພາສາຫຼັກ) ----------
 const lo = {
-  // ປຸ່ມສະຫຼັບພາສາ/theme
   toggle: {
-    switchLabel: "EN", // ຂໍ້ຄວາມເທິງປຸ່ມ = ພາສາທີ່ຈະປ່ຽນໄປ
+    switchLabel: "EN",
     switchAria: "Switch to English",
     theme: "ສະຫຼັບໂໝດມືດ",
   },
 
-  // ສ່ວນຮ່ວມຂອງໜ້າ Login ແລະ Register
   auth: {
     tagline: "ຊອກຫາລົດໃນຝັນຂອງທ່ານ",
     subtagline: "ລົດໃໝ່ຄຸນນະພາບ ພ້ອມບໍລິການຫຼັງການຂາຍ",
@@ -32,7 +15,6 @@ const lo = {
     googleNotReady: "ການເຂົ້າສູ່ລະບົບດ້ວຍ Google ຍັງບໍ່ທັນເປີດໃຊ້",
   },
 
-  // ຊ່ອງພິມໃນຟອມ
   fields: {
     name: "ຊື່",
     namePlaceholder: "ຊື່ຂອງທ່ານ",
@@ -48,7 +30,6 @@ const lo = {
     errEmailInvalid: "ອີເມວບໍ່ຖືກຕ້ອງ (ຕົວຢ່າງ: noy@gmail.com)",
   },
 
-  // ໜ້າ Login
   login: {
     title: "ຍິນດີຕ້ອນຮັບກັບມາ",
     forgot: "ລືມລະຫັດຜ່ານ?",
@@ -60,7 +41,6 @@ const lo = {
     errWrong: "ອີເມວ ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ",
   },
 
-  // ໜ້າ Register
   register: {
     title: "ສ້າງບັນຊີໃໝ່",
     submit: "ລົງທະບຽນ",
@@ -72,7 +52,6 @@ const lo = {
     success: "ລົງທະບຽນສຳເລັດ! ກະລຸນາເຂົ້າສູ່ລະບົບ",
   },
 
-  // ໜ້າ Dashboard
   dashboard: {
     welcome: "ສະບາຍດີ,",
     guest: "ແຂກ",
@@ -84,7 +63,6 @@ const lo = {
     logout: "ອອກຈາກລະບົບ",
   },
 
-  // ເມນູດ້ານຊ້າຍ
   menu: {
     dashboard: "ໜ້າຫຼັກ",
     cars: "ລົດ",
@@ -96,7 +74,6 @@ const lo = {
     logout: "ອອກຈາກລະບົບ",
   },
 
-  // ກາດສະຖິຕິ
   stats: {
     carsInStock: "ລົດໃນສາງ",
     sold: "ຂາຍໄດ້",
@@ -107,13 +84,11 @@ const lo = {
     vsLastMonth: "ທຽບກັບເດືອນກ່ອນ",
   },
 
-  // ກຣາຟຍອດຂາຍ
   chart: {
     title: "ພາບລວມຍອດຂາຍ",
     sales: "ຍອດຂາຍ",
   },
 
-  // ກາດລົດຂາຍດີ
   topCars: {
     title: "ລົດຂາຍດີ",
     sedan: "ເກັງ",
@@ -123,7 +98,6 @@ const lo = {
     stock: "ໃນສາງ",
   },
 
-  // ກາດລາຍການສັ່ງຊື້
   orders: {
     title: "ການສັ່ງຊື້",
     empty: "ບໍ່ມີການສັ່ງຊື້ໃນຊ່ວງນີ້",
@@ -138,13 +112,10 @@ const lo = {
     pending: "ລໍຖ້າຈ່າຍ",
   },
 
-  // ປຸ່ມເລືອກຊ່ວງເວລາ (ໃນສ່ວນຫົວຂອງ Dashboard)
   periods: { day: "ມື້", week: "ອາທິດ", month: "ເດືອນ", year: "ປີ" },
 
-  // ຊ່ວງເວລາແບບເຕັມ (ສະແດງຂ້າງຫົວຂໍ້ກາດ)
   periodRange: { day: "ມື້ນີ້", week: "7 ວັນລ່າສຸດ", month: "4 ອາທິດລ່າສຸດ", year: "12 ເດືອນລ່າສຸດ" },
 
-  // ຂໍ້ຄວາມທ້າຍ % ປ່ຽນແປງ
   vsPrevious: {
     day: "ທຽບກັບມື້ວານ",
     week: "ທຽບກັບ 7 ວັນກ່ອນ",
@@ -152,15 +123,11 @@ const lo = {
     year: "ທຽບກັບປີກ່ອນ",
   },
 
-  // ຊື່ເດືອນ (ໃຊ້ສະແດງວັນທີ) ລຽງຈາກ ມັງກອນ (1) ຫາ ທັນວາ (12)
   months: [
     "ມັງກອນ", "ກຸມພາ", "ມີນາ", "ເມສາ", "ພຶດສະພາ", "ມິຖຸນາ",
     "ກໍລະກົດ", "ສິງຫາ", "ກັນຍາ", "ຕຸລາ", "ພະຈິກ", "ທັນວາ",
   ],
 
-  // ແປປ້າຍຂອງກຣາຟ: ຂໍ້ມູນໃນ dashboard-data ເປັນພາສາອັງກິດ (ເຊັ່ນ "Mon", "Jun")
-  // ຕາຕະລາງນີ້ບອກວ່າແຕ່ລະຄຳ ໃຫ້ສະແດງເປັນຫຍັງ
-  // "as Record<string, string>" = ບອກ TypeScript ວ່າເປັນ object ທີ່ key ແລະຄ່າ ເປັນຂໍ້ຄວາມໃດກໍໄດ້
   chartLabels: {
     Mon: "ຈັນ", Tue: "ອັງຄານ", Wed: "ພຸດ", Thu: "ພະຫັດ", Fri: "ສຸກ", Sat: "ເສົາ", Sun: "ອາທິດ",
     "Week 1": "ອາທິດທີ 1", "Week 2": "ອາທິດທີ 2", "Week 3": "ອາທິດທີ 3", "Week 4": "ອາທິດທີ 4",
@@ -169,11 +136,8 @@ const lo = {
   } as Record<string, string>,
 };
 
-// ປະເພດຂອງຂໍ້ຄວາມ = ໂຄງສ້າງດຽວກັບ lo (typeof = ເອົາ type ຈາກຕົວແປ)
 export type Translation = typeof lo;
 
-// ---------- ພາສາອັງກິດ (ພາສາສຳຮອງ) ----------
-// ": Translation" = ບັງຄັບໃຫ້ມີ key ຄົບຄືກັບ lo
 const en: Translation = {
   toggle: {
     switchLabel: "ລາວ",
@@ -284,25 +248,16 @@ const en: Translation = {
     year: "vs previous year",
   },
   months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-  // ພາສາອັງກິດ: ຂໍ້ມູນເປັນພາສາອັງກິດຢູ່ແລ້ວ ບໍ່ຕ້ອງແປ (object ວ່າງ)
   chartLabels: {},
 };
 
-// ລວມທັງ 2 ພາສາ: translations["lo"] ຫຼື translations["en"]
 export const translations: Record<Lang, Translation> = { lo, en };
 
-// ---------- ຟັງຊັນຊ່ວຍ ----------
-
-// ແປປ້າຍກຣາຟ: ຖ້າມີໃນຕາຕະລາງ chartLabels ໃຊ້ຄຳແປ, ຖ້າບໍ່ມີ ໃຊ້ຄຳເດີມ
-// "??" = ຖ້າທາງຊ້າຍບໍ່ມີຄ່າ (undefined) ໃຫ້ໃຊ້ທາງຂວາ
 export function translateLabel(t: Translation, label: string): string {
   return t.chartLabels[label] ?? label;
 }
 
-// ສະແດງວັນທີ: "2026-11-17" → "17 ພະຈິກ 2026" (ລາວ) ຫຼື "17 Nov 2026" (ອັງກິດ)
 export function formatDate(t: Translation, isoDate: string): string {
-  // split("-") = ຕັດຂໍ້ຄວາມຕາມເຄື່ອງໝາຍ "-" → ["2026", "11", "17"]
   const [year, month, day] = isoDate.split("-");
-  // Number("11") = 11, ແຕ່ array ເລີ່ມນັບຈາກ 0 ຈຶ່ງຕ້ອງ -1
   return `${Number(day)} ${t.months[Number(month) - 1]} ${year}`;
 }
